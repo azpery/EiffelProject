@@ -1,6 +1,6 @@
 class MEDIATHEQUE
 	--
-	-- Le jeu des tours de Hanoi
+	-- Gestion d'une médiathèque
 	--
 --
 	
@@ -8,71 +8,32 @@ creation {ANY}
 	make
 
 feature {}
-	lesutilisateurs:ARRAY[UTILISATEUR]
-	lesmedias:ARRAY[MEDIA]
+	gestion_utilisateur:GESTIONUTILISATEUR
+	gestion_media:GESTIONMEDIA
+	iu:IU
 
 feature {ANY}
 	make is
-			-- Creation du jeu et boucle principale
-		do
-			init_util
-			afficher_utilisateurs
-
-			init_media
-			afficher_medias
-		end
-	init_media is
-			--Chargement des médias 
-		local
-			parser:PARSER
-		do
-			create parser.make
-			lesmedias := parser.parse_media("./medias.txt")
+		-- Creation du jeu et boucle principale
+	local
+		choice:INTEGER
+	do
+		create gestion_media.make
+		create gestion_utilisateur.make
+		create iu.make
+		from 
+		choice := 1
+		until(choice = 0)
+		loop
+			choice := iu.show_multiple_choice("Gérer les utilisateurs;Gérer les médias", "Menu principal")
+			inspect choice
+			when 1 then
+				gestion_utilisateur.enter
+			when 2 then
+				gestion_media.enter
+			else
 			
-		end
-
-	init_util is
-			--Chargement des utilisateurs 
-		local
-			nouvel_utilisateur : UTILISATEUR
-			parser:PARSER
-		do
-			create parser.make
-			lesutilisateurs := parser.parse_utilisateur("./utilisateurs.txt")
-		end
-
-	afficher_utilisateurs is
-			--Affichage en liste des utilisateurs chargés
-		local
-			i:INTEGER
-			utilisateur:UTILISATEUR
-		do
-			
-			from
-				i := lesutilisateurs.count - 1
-			until(i = 1)
-			loop
-				utilisateur := lesutilisateurs.item(i)
-				utilisateur.print_utilisateur
-				i := i - 1 
 			end
-
-		end
-	afficher_medias is
-			--Affichage en liste des utilisateurs chargés
-		local
-			i:INTEGER
-			media:MEDIA
-		do
-			
-			from
-				i := lesmedias.count - 1
-			until(i = 1)
-			loop
-				media := lesmedias.item(i)
-				media.print_media
-				i := i - 1 
-			end
-
-		end
-end -- class HANOI
+		end		
+	end
+end -- class MEDIATHEQUE

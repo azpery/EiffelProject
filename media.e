@@ -6,21 +6,26 @@ creation {ANY}
 
 feature {}
 	titre:STRING
-	auteur:STRING
-	annee:STRING
+	nbexemplaire:INTEGER
+	iu:IU
 feature {}
+	super_make is
+	do
+		titre := "Pas de titre"
+		nbexemplaire := 0
+		create iu.make
+	end
 	make is
 	do
 		titre := "Pas de titre"
-		auteur := "Pas d'auteur"
-		annee := "Pas d'année"
+		nbexemplaire := 0
+		create iu.make
 	end
-	init (t:STRING; au:STRING; an:STRING) is
+	init (t:STRING; an:STRING; nb:INTEGER) is
 			-- Creation d'un utilisateur
 		do
 			titre := t
-			auteur := au
-			annee := an
+			nbexemplaire := nb
 		end
 
 feature {ANY}
@@ -28,37 +33,27 @@ feature {ANY}
 		do
 			titre := i
 		end
-	set_auteur(n:STRING) is
-		do
-			auteur := n
-		end
-	set_annee(p:STRING) is
-		do
-			annee := p
-		end
 	get_titre : STRING is
 		do
 			Result := titre
 		end
-	get_auteur : STRING is
+
+	set_nbexemplaire(p:INTEGER) is
 		do
-			Result := auteur
+			nbexemplaire := p
 		end
-	get_annee : STRING is
+	get_nbexemplaire : INTEGER is
 		do
-			Result := annee
+			Result := nbexemplaire
 		end
 	print_media is
-		do
-			io.put_string("Titre:")
-			io.put_string(titre)
-			io.put_string("%N")
-			io.put_string("Auteur:")
-			io.put_string(auteur)
-			io.put_string("%N")
-			io.put_string("Année:")
-			io.put_string(annee)
-			io.put_string("%N")
-		end
+	do
+		io.put_string("Titre:")
+		io.put_string(titre)
+		io.put_string("%N")
+		io.put_string("Nombre d'exemplaire disponibles:")
+		io.put_integer(nbexemplaire)
+		io.put_string("%N")
+	end
 
 end -- class TOWER

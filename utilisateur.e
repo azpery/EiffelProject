@@ -8,16 +8,22 @@ feature {}
 	id:STRING
 	nom:STRING
 	prenom:STRING
+	isadmin:BOOLEAN
 feature {}
 	make is
 	do
+		nom := "pas de nom"
+		prenom := "pas de prénom"
+		id := "NoId"
+		isadmin := False
 	end
-	init (login:STRING; n:STRING; p:STRING) is
+	init (login:STRING; n:STRING; p:STRING; isa:BOOLEAN) is
 			-- Creation d'un utilisateur
 		do
 			id := login
 			nom := n
 			prenom := p
+			isadmin := isa
 		end
 
 feature {ANY}
@@ -36,6 +42,14 @@ feature {ANY}
 	get_id : STRING is
 		do
 			Result := id
+		end
+	set_isadmin(p:BOOLEAN) is
+		do
+			isadmin := p
+		end
+	get_isadmin : BOOLEAN is
+		do
+			Result := isadmin
 		end
 	get_nom : STRING is
 		do
