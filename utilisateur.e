@@ -71,5 +71,17 @@ feature {ANY}
 			io.put_string(prenom)
 			io.put_string("%N")
 		end
-
-end -- class TOWER
+	to_file_string: STRING is
+		local
+			ligne:STRING
+		do
+			if(isadmin)then
+				ligne:= "Nom<" + nom + "> ; Prenom<" + prenom + "> ; Identifiant<" + id + ">; Admin<OUI>"
+			else
+				ligne:= "Nom<" + nom + "> ; Prenom<" + prenom + "> ; Identifiant<" + id + ">"
+			end
+			Result:= ligne
+		end
+	--
+	
+end 

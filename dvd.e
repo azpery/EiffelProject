@@ -98,6 +98,9 @@ feature{ANY}
 				i := i - 1 
 			end
 		end
+	
+
+
 
 	is_equals(object:DVD):BOOLEAN is
 	do
