@@ -59,6 +59,13 @@ feature{ANY}
 		end
 	end
 
+	ask_question(question:STRING):STRING is
+	do
+		io.put_string(question+" :%NVotre réponse:")
+		io.read_line
+		Result := io.last_string
+	end
+
 	put_centered_string(text:STRING; padding_char:CHARACTER) is
 	--Affiche du texte centré
 	local
@@ -101,6 +108,17 @@ feature{ANY}
 			i:= i + 1
 		end
 		Result := vretour
+	end
+
+	to_file ( path : STRING, content:STRING ) is
+	local
+		fichier : TEXT_FILE_WRITE
+		i : INTEGER
+	do
+		create fichier.make
+		fichier.connect_to(path)
+		fichier.put_string(content)
+		fichier.disconnect
 	end
 
 end -- class IU

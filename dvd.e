@@ -1,7 +1,7 @@
 class DVD
 
 inherit MEDIA
-	redefine print_media, make end	
+	redefine  make end	
 
 creation{ANY}
 	 make
@@ -61,6 +61,10 @@ feature{ANY}
 	do
 		Result := type
 	end
+	get_class:STRING is
+	do
+		Result := "DVD"
+	end
 
 	print_media is
 	do
@@ -94,6 +98,51 @@ feature{ANY}
 				i := i - 1 
 			end
 		end
+
+	is_equals(object:DVD):BOOLEAN is
+	do
+		Result := False
+		if(object.get_realisateur.is_equal(get_realisateur) and object.get_titre.is_equal(get_titre))then
+			Result := True
+		end
+	end
+
+	is_equal_to(terme:STRING; t:STRING):BOOLEAN is
+	do
+		Result := False
+		if(t.is_equal("annee") and get_annee.is_equal(terme))then
+			Result := True
+		elseif(t.is_equal("realisateur") and get_realisateur.is_equal(terme))then
+			Result := True
+		elseif(t.is_equal("type") and get_type.is_equal(terme))then
+			Result := True
+		elseif(t.is_equal("titre") and get_titre.is_equal(terme))then
+			Result := True
+		elseif(t.is_equal("") and get_annee.is_equal(terme) or get_realisateur.is_equal(terme) or get_type.is_equal(terme)or get_titre.is_equal(terme))then
+			Result := True
+		end
+	end
+	
+	to_file_string:STRING is
+	do
+		Result := "DVD ; Titre<"+titre+"> ; Annee<"+annee+"> ; Realisateur<"+realisateur+">"+acteur_to_string
+	end
+
+	acteur_to_string:STRING is
+	local
+		i:INTEGER
+		res:STRING
+	do
+		res := ""			
+		from
+			i := acteur.count - 1
+		until(i = 0)
+		loop
+			res := "; Acteur<"+acteur.item(i)+">"
+			i := i - 1 
+		end
+		Result := res
+	end
 
 
 end -- class LIVRE

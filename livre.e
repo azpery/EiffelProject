@@ -1,7 +1,7 @@
 class LIVRE
 
 inherit MEDIA
-	redefine print_media,make end	
+	redefine make end	
 
 creation{ANY}
 	 make
@@ -25,6 +25,10 @@ feature{ANY}
 	do
 		Result := auteur
 	end
+	get_class:STRING is
+	do
+		Result := "LIVRE"
+	end
 
 	print_media is
 	do
@@ -38,5 +42,29 @@ feature{ANY}
 		io.put_string("%N")
 	end
 
+	to_file_string:STRING is
+	do
+		Result := "Livre ; Titre<"+titre+"> ; Auteur<"+auteur+">"
+	end
+
+	is_equals(object:LIVRE):BOOLEAN is
+	do
+		Result := False
+		if(object.get_auteur.is_equal(get_auteur) and object.get_titre.is_equal(get_titre))then
+			Result := True
+		end
+	end
+
+	is_equal_to(terme:STRING; t:STRING):BOOLEAN is
+	do
+		Result := False
+		if(t.is_equal("titre") and get_titre.is_equal(terme))then
+			Result := True
+		elseif(t.is_equal("auteur") and get_auteur.is_equal(terme))then
+			Result := True
+		elseif(t.is_equal("") and get_auteur.is_equal(terme) or get_titre.is_equal(terme))then
+			Result := True
+		end
+	end
 
 end -- class LIVRE

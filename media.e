@@ -1,8 +1,5 @@
-class MEDIA
+deferred class MEDIA
 -- Represente un utilisateur de la médiathèque
-	
-creation {ANY}
-	init, make
 
 feature {}
 	titre:STRING
@@ -46,14 +43,14 @@ feature {ANY}
 		do
 			Result := nbexemplaire
 		end
-	print_media is
-	do
-		io.put_string("Titre:")
-		io.put_string(titre)
-		io.put_string("%N")
-		io.put_string("Nombre d'exemplaire disponibles:")
-		io.put_integer(nbexemplaire)
-		io.put_string("%N")
-	end
+	print_media is deferred end
+
+	is_equals(object:MEDIA):BOOLEAN is deferred end
+
+	is_equal_to(terme:STRING; t:STRING):BOOLEAN is deferred end 
+	
+	get_class:STRING is deferred end
+
+	to_file_string:STRING is deferred end
 
 end -- class TOWER
