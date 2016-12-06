@@ -1,0 +1,8 @@
+#!/bin/bash
+compile -o z mediatheque.e
+./z
+rm z
+rm *.c
+rm *.h
+rm *.o
+rm *.id

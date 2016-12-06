@@ -54,8 +54,9 @@ feature {ANY}
 		Result := lesutilisateurs	
 	end
 	
-	parse_media(file:STRING):ARRAY[MEDIA] is
+	parse_media(file:STRING; filter:STRING):ARRAY[MEDIA] is
 	--Fonction de parse d'un fichier qui permet de renvoyer une liste de médias
+	--Prend en paramètre le fichier source et un filtre sur le type de média
 	local
 		lesmedias:ARRAY[MEDIA]
 		nouveau_livre:LIVRE
@@ -99,9 +100,9 @@ feature {ANY}
 				nouveau_dvd.add_acteur(arr.item(i+1))
 			end
 			if(arr.item(i).is_equal("\e"))then
-				if(current_type.is_equal("livre")) then
+				if(current_type.is_equal("livre") and filter.is_equal("livre") or filter.is_equal("none")) then
 					lesmedias.add_last(nouveau_livre)		
-				else if(current_type.is_equal("dvd")) then
+				else if(current_type.is_equal("dvd") and filter.is_equal("dvd") or filter.is_equal("none")) then
 					lesmedias.add_last(nouveau_dvd)
 				end
 				end
@@ -186,8 +187,8 @@ feature {ANY}
 				is_end_of_line := True
 				buffer := line
 			else
-				buffer := string.substring(string.count - line.count + 1, line.index_of(delimiter, 1)-1)
-				line := string.substring(line.index_of(delimiter,1)+1, line.count)
+				buffer := line.substring(1, line.index_of(delimiter, 1)-1)
+				line := line.substring(line.index_of(delimiter,1)+1, line.count)
 			end
 			vreturn.add_last(buffer)
 		end

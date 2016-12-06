@@ -5,6 +5,8 @@ creation{ANY}
 
 feature{}
 	lesmedias:ARRAY[MEDIA]
+	lesdvd:ARRAY[MEDIA]
+	leslivres:ARRAY[MEDIA]
 	iu:IU
 
 feature{ANY}
@@ -23,12 +25,18 @@ feature{ANY}
 			choix := 1
 		until(choix = 0)
 		loop
-			choix := iu.show_multiple_choice("Afficher la liste des médias chargés;Recharger les médias","Menu gestion des médias")
+			choix := iu.show_multiple_choice("Afficher la liste des médias chargés;Afficher les DVD;Afficher les livres;Recharger les médias","Menu gestion des médias")
 			inspect choix
 			when 1 then
-				afficher_medias
+				afficher_medias(lesmedias)
 			when 2 then
+				afficher_medias(lesdvd)
+			when 3 then
+				afficher_medias(leslivres)
+			when 4 then
 				init_media
+			when 5 then 
+				rechercher_media
 			else		
 			end
 		end
@@ -40,11 +48,12 @@ feature{ANY}
 		parser:PARSER
 	do
 		create parser.make
-		lesmedias := parser.parse_media("./medias.txt")
-		
+		lesmedias := parser.parse_media("./medias.txt", "none")
+		lesdvd := parser.parse_media("./medias.txt", "dvd")
+		leslivres := parser.parse_media("./medias.txt", "livre")
 	end
 
-	afficher_medias is
+	afficher_medias(liste:ARRAY[MEDIA]) is
 		--Affichage en liste des médias chargés
 	local
 		i:INTEGER
@@ -52,13 +61,20 @@ feature{ANY}
 	do
 		
 		from
-			i := lesmedias.count - 1
+			i := liste.count - 1
 		until(i = 1)
 		loop
-			media := lesmedias.item(i)
+			media := liste.item(i)
 			media.print_media
 			i := i - 1 
 		end
+	end
+	rechercher_media is
+		--Menu de recherche de média
+	local
+		choix:INTEGER
+	do
+		choix := iu.show_multiple_choice("Rechercher un média par nom;Rechercher un DVD; Rechercher un livre", "Rechercher un media")
 	end
 
 end -- class IU
