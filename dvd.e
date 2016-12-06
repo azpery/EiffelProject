@@ -94,6 +94,9 @@ feature{ANY}
 				i := i - 1 
 			end
 		end
+	
+
+
 
 
 end -- class LIVRE
