@@ -15,7 +15,7 @@ feature {}
 	make is
 	do
 		titre := "Pas de titre"
-		nbexemplaire := 0
+		nbexemplaire := 1
 		create iu.make
 	end
 	init (t:STRING; an:STRING; nb:INTEGER) is
@@ -52,5 +52,11 @@ feature {ANY}
 	get_class:STRING is deferred end
 
 	to_file_string:STRING is deferred end
+
+	set_media is deferred end
+
+	modifier_media is deferred end
+
+	get_id:STRING is deferred end
 
 end -- class TOWER

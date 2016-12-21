@@ -13,6 +13,39 @@ feature {}
 		end
 
 feature {ANY}
+	parse_emprunt(file:STRING; gu:GESTIONUTILISATEUR; gm:GESTIONMEDIA):ARRAY[EMPRUNT] is
+	--Function de parse d'un fichier qui permet de renvoyer une liste d'emprunt
+	local
+		lesemprunts:ARRAY[EMPRUNT]
+		nouvel_emprunt:EMPRUNT
+		arr:ARRAY[STRING]
+		i:INTEGER
+	do
+		create lesemprunts.make(0,0)
+		create nouvel_emprunt.make
+		arr := parse(file)
+		from
+			i := 1
+		until i = arr.count
+		loop
+			
+			if(arr.item(i).is_equal("utilisateur"))then
+				nouvel_emprunt.set_utilisateur(gu.recherche(arr.item(i+1), "id").item(0))
+			end
+			if(arr.item(i).is_equal("media"))then
+				nouvel_emprunt.set_utilisateur(gm.recherche(arr.item(i+1), "id").item(0))
+			end
+			if(arr.item(i).is_equal("\e"))then
+				lesemprunts.add_last(nouvel_emprunt)
+				create nouvel_emprunt.make
+			end
+			  
+			i := i + 1
+		end
+		
+		Result := lesemprunts	
+	end
+
 	parse_utilisateur(file:STRING):ARRAY[UTILISATEUR] is
 	--Function de parse d'un fichier qui permet de renvoyer une liste d'utilisateur
 	local
@@ -194,4 +227,5 @@ feature {ANY}
 		end
 		Result := vreturn
 	end
+
 end

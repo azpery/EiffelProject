@@ -8,10 +8,13 @@ feature{}
 	lesdvd:ARRAY[MEDIA]
 	leslivres:ARRAY[MEDIA]
 	iu:IU
+	media_path:STRING
 
 feature{ANY}
+
 	make is
 	do
+		media_path := "medias.txt"
 		init_media
 		create iu.make
 	end
@@ -25,19 +28,15 @@ feature{ANY}
 			choix := 1
 		until(choix = 0)
 		loop
-			choix := iu.show_multiple_choice("Afficher la liste des medias charges;Afficher les DVD;Afficher les livres;Recharger les medias;Rechercher un media;Sauvegarder","Menu gestion des medias")
+			choix := iu.show_multiple_choice("Ajouter un nouveau média;Rechercher un media;Modifier un média;Sauvegarder","Menu gestion des medias")
 			inspect choix
 			when 1 then
-				afficher_medias(lesmedias)
-			when 2 then
-				afficher_medias(lesdvd)
-			when 3 then
-				afficher_medias(leslivres)
-			when 4 then
-				init_media
-			when 5 then 
+				ajouter
+			when 2 then 
 				rechercher_media
-			when 6 then 
+			when 3 then 
+				modifier_media
+			when 4 then 
 				exporter_medias
 			else		
 			end
@@ -50,9 +49,9 @@ feature{ANY}
 		parser:PARSER
 	do
 		create parser.make
-		lesmedias := parser.parse_media("./medias.txt", "none")
-		lesdvd := parser.parse_media("./medias.txt", "dvd")
-		leslivres := parser.parse_media("./medias.txt", "livre")
+		lesmedias := parser.parse_media(media_path, "none")
+		lesdvd := parser.parse_media(media_path, "dvd")
+		leslivres := parser.parse_media(media_path, "livre")
 	end
 
 	afficher_medias(liste:ARRAY[MEDIA]) is
@@ -71,6 +70,55 @@ feature{ANY}
 			i := i - 1 
 		end
 	end
+
+	modifier_media is
+	--Méthode de modification de média
+	local
+		focus:ARRAY[MEDIA]
+		choix:STRING
+	do
+		choix := ""
+		from
+			choix := choix
+		until(choix.is_equal("q"))
+		loop
+			choix := iu.ask_question("Rechercher un média à modifier(q pour quitter)")
+			focus := rechercher(choix, "")
+			print_medias(focus)
+			if(focus.upper > 0) then
+				choix := iu.ask_question("Quel média voulez-vous modifier?(q pour quitter)")
+				if(choix.to_integer <= focus.upper)then
+					focus.item(choix.to_integer).modifier_media
+				end
+			else
+				io.put_string("Aucun média n'a été trouvé")			
+			end
+		end
+	end
+
+	ajouter is
+	--méthode d'ajout de média
+	local
+		dvd:DVD
+		livre:LIVRE
+		choix:INTEGER
+	do
+		choix := iu.show_multiple_choice("Ajouter un livre;Ajouter un DVD","Ajouter un média")
+		inspect choix
+		when 2 then
+			create dvd.make
+			dvd.set_media
+			lesdvd.add_last(dvd)
+		when 1 then
+			create livre.make
+			livre.set_media
+			leslivres.add_last(livre)
+		else		
+		end
+		exporter_medias
+		io.put_string("Média ajouté avec succés")
+	end
+
 	rechercher_media is
 		--Menu de recherche de média
 	local
@@ -80,12 +128,16 @@ feature{ANY}
 			choix := 1
 		until(choix = 0)
 		loop
-			choix := iu.show_multiple_choice("Recherche rapide; Recherche avancée","Menu gestion des médias")
+			choix := iu.show_multiple_choice("Recherche rapide;Afficher la liste des medias charges;Afficher les DVD;Afficher les livres","Menu gestion des médias")
 			inspect choix
 			when 1 then
 				print_medias(rechercher(iu.ask_question("Entrez votre recherche"), ""))
 			when 2 then
+				afficher_medias(lesmedias)
+			when 3 then
 				afficher_medias(lesdvd)
+			when 4 then
+				afficher_medias(leslivres)
 			else		
 			end
 		end
@@ -105,7 +157,7 @@ feature{ANY}
 		until(i = lesdvd.count)
 		loop
 			media := lesdvd.item(i)
-			if(media.is_equal_to(terme, "")) then
+			if(media.is_equal_to(terme, type)) then
 				res.add_last(media)
 			end
 			i := i + 1 
@@ -116,7 +168,7 @@ feature{ANY}
 		until(i = leslivres.count)
 		loop
 			media := leslivres.item(i)
-			if(media.is_equal_to(terme, "")) then
+			if(media.is_equal_to(terme, type)) then
 				res.add_last(media)
 			end
 			i := i + 1 
@@ -148,7 +200,7 @@ feature{ANY}
 			res := res + "%N" + media.to_file_string
 			i := i + 1 
 		end
-		io.put_string(res)
+		iu.to_file(media_path, res)
 	end
 
 	print_medias(liste:ARRAY[MEDIA]) is

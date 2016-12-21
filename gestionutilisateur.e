@@ -141,6 +141,34 @@ feature{ANY}
 		io.read_line
 		terme:=io.last_string
 		
+		resultat_recherche := recherche(terme, type)
+		
+		if(resultat_recherche.count = 1)then
+			io.put_string("Aucun résultat pour la recherche")		
+		else
+			from
+			j := 1
+			until(j = resultat_recherche.count)
+			loop
+				utilisateur := resultat_recherche.item(j)
+				io.put_integer(j)
+				io.put_string(":")	
+				utilisateur.print_utilisateur
+				j := j + 1 
+			end	
+		end
+		
+		
+		
+	end
+
+	recherche(terme:STRING; type:STRING):ARRAY[UTILISATEUR] is
+	local
+		i:INTEGER
+		resultat_recherche:ARRAY[UTILISATEUR]
+		utilisateur:UTILISATEUR
+	do
+		create resultat_recherche.make(0,0)
 		from
 			i := lesutilisateurs.count - 1
 		until(i = 1)
@@ -168,24 +196,7 @@ feature{ANY}
 			end
 			i := i - 1 
 		end
-		
-		if(resultat_recherche.count = 1)then
-			io.put_string("Aucun résultat pour la recherche")		
-		else
-			from
-			j := 1
-			until(j = resultat_recherche.count)
-			loop
-				utilisateur := resultat_recherche.item(j)
-				io.put_integer(j)
-				io.put_string(":")	
-				utilisateur.print_utilisateur
-				j := j + 1 
-			end	
-		end
-		
-		
-		
+		Result := resultat_recherche
 	end
 
 

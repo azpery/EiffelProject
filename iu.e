@@ -110,7 +110,7 @@ feature{ANY}
 		Result := vretour
 	end
 
-	to_file ( path : STRING, content:STRING ) is
+	to_file ( path : STRING; content:STRING ) is
 	local
 		fichier : TEXT_FILE_WRITE
 		i : INTEGER
