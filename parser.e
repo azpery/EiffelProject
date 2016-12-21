@@ -31,11 +31,18 @@ feature {ANY}
 			
 			if(arr.item(i).is_equal("utilisateur"))then
 				nouvel_emprunt.set_utilisateur(gu.recherche(arr.item(i+1), "id").item(0))
-			end
-			if(arr.item(i).is_equal("media"))then
-				nouvel_emprunt.set_utilisateur(gm.recherche(arr.item(i+1), "id").item(0))
-			end
-			if(arr.item(i).is_equal("\e"))then
+			elseif(arr.item(i).is_equal("media"))then
+				nouvel_emprunt.set_media(gm.rechercher(arr.item(i+1), "id").item(0))
+			elseif(arr.item(i).is_equal("isrendu") and arr.item(i+1).is_equal("1"))then
+				nouvel_emprunt.set_is_rendu(True)
+			elseif(arr.item(i).is_equal("annee_emprunt"))then
+				nouvel_emprunt.set_annee_emprunt(arr.item(i+1).to_integer)
+			elseif(arr.item(i).is_equal("mois_emprunt"))then
+				nouvel_emprunt.set_mois_emprunt(arr.item(i+1).to_integer)
+			elseif(arr.item(i).is_equal("jour_emprunt"))then
+				nouvel_emprunt.set_jour_emprunt(arr.item(i+1).to_integer)
+			elseif(arr.item(i).is_equal("\e"))then
+				nouvel_emprunt.update_date_retour
 				lesemprunts.add_last(nouvel_emprunt)
 				create nouvel_emprunt.make
 			end

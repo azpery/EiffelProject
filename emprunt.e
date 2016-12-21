@@ -16,6 +16,7 @@ feature {ANY}
 	do
 		date_emprunt.update
 		update_date_retour
+		is_rendu := False
 	end
 
 	init(u:UTILISATEUR; m:MEDIA) is

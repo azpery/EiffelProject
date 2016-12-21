@@ -10,6 +10,7 @@ creation {ANY}
 feature {}
 	gestion_utilisateur:GESTIONUTILISATEUR
 	gestion_media:GESTIONMEDIA
+	utilisateur:UTILISATEUR
 	iu:IU
 
 feature {ANY}
