@@ -169,13 +169,16 @@ feature{ANY}
 		utilisateur:UTILISATEUR
 	do
 		create resultat_recherche.make(0,0)
+		
 		from
-			i := lesutilisateurs.count - 1
-		until(i = 1)
+			i := lesutilisateurs.upper
+		until(i = lesutilisateurs.lower)
 		loop
 			utilisateur := lesutilisateurs.item(i)
 			if(type.is_equal("id"))then
+				
 				if(terme.is_equal(utilisateur.get_id))then
+					io.put_string("nb utilisateur:"+utilisateur.get_id)
 					resultat_recherche.add_last(utilisateur)
 				else
 					

@@ -43,6 +43,23 @@ feature {ANY}
 		do
 			Result := nbexemplaire
 		end
+	add_emprunt(utilisateur:UTILISATEUR):EMPRUNT is
+	local
+		emprunt:EMPRUNT
+	do
+		create emprunt.init(utilisateur, Current)
+		if(nbexemplaire > 0)then
+			if(iu.confirm(utilisateur.get_prenom+", êtes vous sur de vouloir emprunter "+titre+"%NVous aurez jusqu'au "+emprunt.get_date_retour+" avant de rendre le "+get_class+"%N(o pour oui, n pour non)"))then
+				nbexemplaire := nbexemplaire - 1
+			else
+				emprunt := Void
+			end
+		else
+			emprunt := Void
+			io.put_string("Quantité disponible insuffisante")
+		end
+		Result := emprunt
+	end
 	print_media is deferred end
 
 	is_equals(object:MEDIA):BOOLEAN is deferred end

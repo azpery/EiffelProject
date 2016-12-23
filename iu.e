@@ -61,9 +61,28 @@ feature{ANY}
 
 	ask_question(question:STRING):STRING is
 	do
-		io.put_string(question+" :%NVotre réponse:")
+		io.put_string("%N"+question+" :")
 		io.read_line
 		Result := io.last_string
+	end
+	
+	confirm(text:STRING):BOOLEAN is
+	local
+		choix:STRING
+		res:BOOLEAN
+	do
+		from
+			choix := ""
+		until(choix.is_equal("o") or choix.is_equal("n"))
+		loop
+			choix := ask_question(text)
+		end
+		if(choix.is_equal("o"))then
+			res := True
+		else
+			res := False
+		end
+		Result := res
 	end
 
 	put_centered_string(text:STRING; padding_char:CHARACTER) is

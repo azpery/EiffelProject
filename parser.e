@@ -24,32 +24,38 @@ feature {ANY}
 		create lesemprunts.make(0,0)
 		create nouvel_emprunt.make
 		arr := parse(file)
-		from
-			i := 1
-		until i = arr.count
-		loop
-			
-			if(arr.item(i).is_equal("utilisateur"))then
-				nouvel_emprunt.set_utilisateur(gu.recherche(arr.item(i+1), "id").item(0))
-			elseif(arr.item(i).is_equal("media"))then
-				nouvel_emprunt.set_media(gm.rechercher(arr.item(i+1), "id").item(0))
-			elseif(arr.item(i).is_equal("isrendu") and arr.item(i+1).is_equal("1"))then
-				nouvel_emprunt.set_is_rendu(True)
-			elseif(arr.item(i).is_equal("annee_emprunt"))then
-				nouvel_emprunt.set_annee_emprunt(arr.item(i+1).to_integer)
-			elseif(arr.item(i).is_equal("mois_emprunt"))then
-				nouvel_emprunt.set_mois_emprunt(arr.item(i+1).to_integer)
-			elseif(arr.item(i).is_equal("jour_emprunt"))then
-				nouvel_emprunt.set_jour_emprunt(arr.item(i+1).to_integer)
-			elseif(arr.item(i).is_equal("\e"))then
-				nouvel_emprunt.update_date_retour
-				lesemprunts.add_last(nouvel_emprunt)
-				create nouvel_emprunt.make
+		if(arr.upper > 3) then
+			from
+				i := 1
+			until i = arr.upper
+			loop
+				if(arr.item(i).is_equal("utilisateur"))then
+					nouvel_emprunt.set_utilisateur(gu.recherche(arr.item(i+1), "id").item(1))
+				elseif(arr.item(i).is_equal("media"))then
+					nouvel_emprunt.set_media(gm.rechercher(arr.item(i+1), "id").item(1))
+				elseif(arr.item(i).is_equal("isrendu") and arr.item(i+1).is_equal("1"))then
+					nouvel_emprunt.set_is_rendu(True)
+				elseif(arr.item(i).is_equal("annee_emprunt"))then
+					nouvel_emprunt.set_annee_emprunt(arr.item(i+1).to_integer)
+				elseif(arr.item(i).is_equal("mois_emprunt"))then
+					nouvel_emprunt.set_mois_emprunt(arr.item(i+1).to_integer)
+				elseif(arr.item(i).is_equal("jour_emprunt"))then
+					nouvel_emprunt.set_jour_emprunt(arr.item(i+1).to_integer)
+				elseif(arr.item(i).is_equal("annee_retour"))then
+					nouvel_emprunt.set_annee_rendu(arr.item(i+1).to_integer)
+				elseif(arr.item(i).is_equal("mois_retour"))then
+					nouvel_emprunt.set_mois_rendu(arr.item(i+1).to_integer)
+				elseif(arr.item(i).is_equal("jour_retour"))then
+					nouvel_emprunt.set_jour_rendu(arr.item(i+1).to_integer)
+				elseif(arr.item(i).is_equal("\e"))then
+					nouvel_emprunt.update_date_retour
+					lesemprunts.add_last(nouvel_emprunt)
+					create nouvel_emprunt.make
+				end
+				  
+				i := i + 1
 			end
-			  
-			i := i + 1
 		end
-		
 		Result := lesemprunts	
 	end
 
@@ -202,7 +208,6 @@ feature {ANY}
 			end
 			vreturn.add_last("\e")
 		end
-
 		reader.disconnect
 		Result := vreturn
 	end
