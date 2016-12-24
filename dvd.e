@@ -181,17 +181,35 @@ feature{ANY}
 		Result := False
 		if(t.is_equal("annee") and get_annee.is_equal(terme))then
 			Result := True
-		elseif(t.is_equal("realisateur") and get_realisateur.is_equal(terme))then
+		elseif(t.is_equal("realisateur") and then get_realisateur.is_equal(terme))then
 			Result := True
-		elseif(t.is_equal("type") and get_type.is_equal(terme))then
+		elseif(t.is_equal("type") and then get_type.is_equal(terme))then
 			Result := True
-		elseif(t.is_equal("titre") and get_titre.is_equal(terme))then
+		elseif(t.is_equal("titre") and then get_titre.is_equal(terme))then
 			Result := True
-		elseif(t.is_equal("id") and get_id.is_equal(terme))then
+		elseif(t.is_equal("id") and then get_id.is_equal(terme))then
 			Result := True
-		elseif(t.is_equal("") and get_annee.is_equal(terme) or get_realisateur.is_equal(terme) or get_type.is_equal(terme)or get_titre.is_equal(terme))then
+		elseif(t.is_equal("") and then get_annee.is_equal(terme) or get_realisateur.is_equal(terme) or get_type.is_equal(terme)or get_titre.is_equal(terme) or acteur_contains(terme))then
 			Result := True
 		end
+	end
+
+	acteur_contains(s:STRING):BOOLEAN is
+	local
+		i:INTEGER
+		res:BOOLEAN
+	do
+		res := False
+		from
+			i := 1
+		until(i = acteur.upper)
+		loop
+			if(acteur.item(i).is_equal(s))then	
+				res := True
+			end
+			i := i + 1
+		end
+		Result := res
 	end
 	
 	to_file_string:STRING is
@@ -217,8 +235,6 @@ feature{ANY}
 
 	get_id:STRING is
 	--Retourne un identifiant unique au média
-	local
-		res:STRING
 	do
 		Result := titre+annee
 	end

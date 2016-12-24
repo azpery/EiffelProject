@@ -25,6 +25,33 @@ feature {ANY}
 		create gestion_media.make
 		create gestion_emprunt.make(Current)
 		create iu.make
+		if(utilisateur.get_isadmin)then
+			from 
+			choice := 1
+			until(choice = 0)
+			loop
+				choice := iu.show_multiple_choice("Interface utilisateur;Administration de la médiathèque", "Choix de rôle")
+				inspect choice
+				when 1 then
+					print_menu_utilisateur
+				when 2 then
+					print_menu_admin
+				else
+			
+				end
+			end
+			
+		else
+			print_menu_utilisateur
+		end
+	end
+
+	print_menu_admin is
+	--Menu administrateur
+	local
+		choice:INTEGER
+	do
+		gestion_emprunt.print_retards
 		iu.put_centered_string("Bienvenue "+utilisateur.get_prenom, '*')
 		from 
 		choice := 1
@@ -41,7 +68,34 @@ feature {ANY}
 			else
 			
 			end
-		end		
+		end	
+	end
+	
+	print_menu_utilisateur is
+	--Menu utilisateur
+	local
+		choice:INTEGER
+	do
+		gestion_emprunt.print_mes_retards
+		iu.put_centered_string("Bienvenue "+utilisateur.get_prenom, '*')
+		from 
+		choice := 1
+		until(choice = 0)
+		loop
+			choice := iu.show_multiple_choice("Consulter les médias disponibles à la location;Effectuer un emprunt;Rendre une location;Consulter mes emprunts en cours", "Menu principal")
+			inspect choice
+			when 1 then
+				gestion_media.rechercher_media
+			when 2 then
+				gestion_emprunt.add_emprunt
+			when 3 then
+				gestion_emprunt.rendre_mon_media
+			when 4 then
+				gestion_emprunt.print_emprunts(gestion_emprunt.get_mesemprunts, False)
+			else
+			
+			end
+		end	
 	end
 
 	get_gestion_media:GESTIONMEDIA is

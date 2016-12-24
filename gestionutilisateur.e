@@ -120,13 +120,12 @@ feature{ANY}
 		type:STRING
 		terme:STRING
 		utilisateur:UTILISATEUR
-		i:INTEGER
 		resultat_recherche:ARRAY[UTILISATEUR]
 		j:INTEGER
 	do
 		create utilisateur.make
 		create resultat_recherche.make(0,0)
-		choix := iu.show_multiple_choice("Login; Nom; Prénom;","Rechercher par:")
+		choix := iu.show_multiple_choice("Login;Nom;Prénom","Rechercher par:")
 		inspect choix
 		when 1 then
 			type:="id"
@@ -178,7 +177,6 @@ feature{ANY}
 			if(type.is_equal("id"))then
 				
 				if(terme.is_equal(utilisateur.get_id))then
-					io.put_string("nb utilisateur:"+utilisateur.get_id)
 					resultat_recherche.add_last(utilisateur)
 				else
 					

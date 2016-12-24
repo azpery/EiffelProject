@@ -123,15 +123,16 @@ feature{ANY}
 			choix := 1
 		until(choix = 0)
 		loop
-			choix := iu.show_multiple_choice("Recherche rapide;Afficher la liste des medias charges;Afficher les DVD;Afficher les livres","Menu gestion des médias")
+			choix := iu.show_multiple_choice("Recherche rapide;Afficher tous les DVD;Afficher tous les livres;Afficher la liste des medias complètes","Menu gestion des médias")
 			inspect choix
 			when 1 then
-				print_medias(rechercher(iu.ask_question("Entrez votre recherche"), ""))
+				print_medias(rechercher(iu.ask_question("Entrez votre recherche(auteur, année, acteur, etc"), ""))
 			when 2 then
-				afficher_medias(lesmedias)
-			when 3 then
 				afficher_medias(lesdvd)
+			when 3 then
+				afficher_medias(leslivres)
 			when 4 then
+				afficher_medias(lesdvd)
 				afficher_medias(leslivres)
 			else		
 			end

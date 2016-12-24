@@ -2,3 +2,4 @@ utilisateur<bdelahay> ; media<HP2012> ; isrendu<0> ; annee_emprunt<2016> ; jour_
 utilisateur<bachibouzouk> ; media<HP2012> ; isrendu<1> ; annee_emprunt<2016> ; jour_emprunt<23> ; mois_emprunt<9>; annee_retour<2016> ; jour_retour<22> ; mois_retour<11>
 utilisateur<bachibouzouk> ; media<MichelJules Verne> ; isrendu<0> ; annee_emprunt<2016> ; jour_emprunt<23> ; mois_emprunt<12>
 utilisateur<anabol> ; media<L'ile mysterieuseJules Verne> ; isrendu<1> ; annee_emprunt<2016> ; jour_emprunt<23> ; mois_emprunt<10>; annee_retour<2016> ; jour_retour<23> ; mois_retour<12>
+utilisateur<anabol> ; media<HP2012> ; isrendu<0> ; annee_emprunt<2016> ; jour_emprunt<24> ; mois_emprunt<12>

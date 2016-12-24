@@ -105,6 +105,7 @@ feature{ANY}
 	end
 
 	save is
+	--Sauvegarde des données dansle fichier 
 	local
 		res:STRING
 		i:INTEGER
@@ -124,7 +125,6 @@ feature{ANY}
 
 	rendre_mon_media is
 	local
-		choix:INTEGER
 		emprunt:EMPRUNT
 	do
 		emprunt := select_emprunt(mesempruntsnonrendu)
@@ -138,7 +138,7 @@ feature{ANY}
 		end
 	end
 
-	print_emprunts(liste:ARRAY[EMPRUNT], only_non_rendu:BOOLEAN) is
+	print_emprunts(liste:ARRAY[EMPRUNT]; only_non_rendu:BOOLEAN) is
 	local
 		i:INTEGER
 		displayed:INTEGER
@@ -180,6 +180,11 @@ feature{ANY}
 			i := i + 1 
 		end
 		Result := res
+	end
+
+	get_mesemprunts:ARRAY[EMPRUNT] is
+	do
+		Result := mesemprunts
 	end
 
 	print_retards is
@@ -225,13 +230,15 @@ feature{ANY}
 		choix:STRING
 	do
 		print_emprunts(liste, False)
-		from 
-			choix := ""
-		until(choix.is_integer and then choix.to_integer <= liste.upper and then choix.to_integer > 0)
-		loop
-			choix := iu.ask_question("Quel média voulez vous sélectionner")
-			if(choix.is_integer and then choix.to_integer <= mesempruntsnonrendu.upper and then choix.to_integer > 0 )then
-				res := liste.item(choix.to_integer)
+		if(liste.count>0)then
+			from 
+				choix := ""
+			until(choix.is_integer and then choix.to_integer <= liste.upper and then choix.to_integer > 0)
+			loop
+				choix := iu.ask_question("Quel emprunt voulez vous sélectionner")
+				if(choix.is_integer and then choix.to_integer <= mesempruntsnonrendu.upper and then choix.to_integer > 0 )then
+					res := liste.item(choix.to_integer)
+				end
 			end
 		end
 		Result := res
