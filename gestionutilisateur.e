@@ -125,13 +125,12 @@ feature{ANY}
 		type:STRING
 		terme:STRING
 		utilisateur:UTILISATEUR
-		i:INTEGER
 		resultat_recherche:ARRAY[UTILISATEUR]
 		j:INTEGER
 	do
 		create utilisateur.make
 		create resultat_recherche.make(0,0)
-		choix := iu.show_multiple_choice("Login; Nom; Prénom;","Rechercher par:")
+		choix := iu.show_multiple_choice("Login;Nom;Prénom","Rechercher par:")
 		inspect choix
 		when 1 then
 			type:="id"
@@ -174,12 +173,14 @@ feature{ANY}
 		utilisateur:UTILISATEUR
 	do
 		create resultat_recherche.make(0,0)
+		
 		from
-			i := lesutilisateurs.count - 1
-		until(i = 1)
+			i := lesutilisateurs.upper
+		until(i = lesutilisateurs.lower)
 		loop
 			utilisateur := lesutilisateurs.item(i)
 			if(type.is_equal("id"))then
+				
 				if(terme.is_equal(utilisateur.get_id))then
 					resultat_recherche.add_last(utilisateur)
 				else

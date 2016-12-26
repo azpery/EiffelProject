@@ -7,7 +7,7 @@ creation{ANY}
 feature {}
 	media:MEDIA
 	utilisateur:UTILISATEUR
-	date_emprunt,date_retour:TIME
+	date_emprunt,date_retour, date_rendu:TIME
 	is_rendu:BOOLEAN
 
 
@@ -16,6 +16,7 @@ feature {ANY}
 	do
 		date_emprunt.update
 		update_date_retour
+		date_rendu := date_emprunt
 		is_rendu := False
 	end
 
@@ -24,6 +25,7 @@ feature {ANY}
 		media := m
 		utilisateur := u
 		date_emprunt.update
+		date_rendu := date_emprunt
 		update_date_retour
 	end
 	
@@ -35,6 +37,27 @@ feature {ANY}
 	get_is_rendu:BOOLEAN is
 	do
 		Result := is_rendu
+	end
+
+	set_annee_rendu(a:INTEGER) is
+	local
+		res:BOOLEAN
+	do
+		res := date_rendu.set(a, date_rendu.month, date_rendu.day, 12, 0, 0)
+	end
+
+	set_jour_rendu(j:INTEGER) is
+	local
+		res:BOOLEAN
+	do
+		res := date_rendu.set(date_rendu.year, date_rendu.month, j, 12, 0, 0)
+	end
+
+	set_mois_rendu(m:INTEGER) is
+	local
+		res:BOOLEAN
+	do
+		res := date_rendu.set(date_rendu.year, m, date_rendu.day, 12, 0, 0)
 	end
 
 	set_annee_emprunt(a:INTEGER) is
@@ -75,6 +98,21 @@ feature {ANY}
 		Result := date_retour.day.to_string +"/"+date_retour.month.to_string+"/"+ date_retour.year.to_string
 	end
 
+	get_date_rendu:STRING is
+	do
+		Result := date_rendu.day.to_string +"/"+date_rendu.month.to_string+"/"+ date_rendu.year.to_string
+	end
+
+	get_utilisateur:UTILISATEUR is
+	do
+		Result := utilisateur
+	end
+
+	get_media:MEDIA is
+	do
+		Result := media
+	end
+
 	set_utilisateur(u:UTILISATEUR) is
 	do
 		utilisateur := u
@@ -102,13 +140,79 @@ feature {ANY}
 		end
 		Result := res
 	end
+	
+	is_retard:BOOLEAN is
+	local
+		now:TIME
+		res:BOOLEAN
+	do
+		res := False
+		now.update
+		if(is_rendu and then date_retour < date_rendu or not is_rendu and then now > date_retour )then
+			res := True
+		end
+		Result := res
+	end
 
-	to_string_export:STRING is
+	get_nb_jour_retard:INTEGER is
+	--Retourne le nombre de jour de retard
+	local
+		now:TIME
+		res:REAL
+	do
+		now.update
+		if(not is_rendu)then
+			res := date_retour.elapsed_seconds(now) / 3600 / 24
+		else
+			res := date_retour.elapsed_seconds(date_rendu) / 3600 / 24
+		end
+		Result := res.floor.force_to_integer_32
+	end
+		
+
+	to_string(iu:IU) is
+	local
+		res:STRING
+	do
+		iu.put_centered_string(media.get_titre, '*')
+		res := "Date d'emprunt: "+get_date_emprunt
+		if(is_rendu and is_retard)then
+			res := res + "%NDate de retour effective:"+ get_date_rendu+"%N"+ get_nb_jour_retard.to_string + " jours de retard"
+		elseif(is_rendu)then
+			res := res + "%NDate de retour effective:"+ get_date_rendu
+		else
+			res := res + "%NDate de retour prévue:"+ get_date_retour
+		end
+		io.put_string(res)
+	end
+
+	to_string_full(iu:IU) is
+	do		
+		to_string(iu)
+		utilisateur.print_utilisateur
+		
+	end
+
+	to_file_string:STRING is
 	local
 		res:STRING
 	do
 		res := "utilisateur<"+utilisateur.get_id+"> ; media<"+media.get_id+"> ; isrendu<"+is_rendu_to_string+"> ; annee_emprunt<"+date_emprunt.year.to_string+"> ; jour_emprunt<"+date_emprunt.day.to_string+"> ; mois_emprunt<"+date_emprunt.month.to_string+">"
+		if(is_rendu)then
+			res := res + "; annee_retour<"+date_rendu.year.to_string+"> ; jour_retour<"+date_rendu.day.to_string+"> ; mois_retour<"+date_rendu.month.to_string+">"
+		end
 		Result := res
+	end
+
+	rendre is
+	--Méthode qui permet de rendre un média
+	local
+		now:TIME
+	do
+		now.update
+		date_rendu := now
+		media.set_nbexemplaire(media.get_nbexemplaire + 1)
+		is_rendu := True
 	end
 	
 

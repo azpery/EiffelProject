@@ -32,8 +32,6 @@ feature{ANY}
 
 	set_media is
 		--Méthode pour renseigner tous les champs de l'objet
-	local
-		choix:STRING
 	do
 		titre.copy(iu.ask_question("Renseigner le titre"))
 		auteur.copy(iu.ask_question("Renseigner l'auteur"))
@@ -105,8 +103,6 @@ feature{ANY}
 
 	get_id:STRING is
 	--Retourne un identifiant unique au média
-	local
-		res:STRING
 	do
 		Result := titre+auteur
 	end

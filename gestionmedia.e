@@ -37,7 +37,7 @@ feature{ANY}
 			when 3 then 
 				modifier_media
 			when 4 then 
-				exporter_medias
+				save
 			else		
 			end
 		end
@@ -74,7 +74,7 @@ feature{ANY}
 	modifier_media is
 	--Méthode de modification de média
 	local
-		focus:ARRAY[MEDIA]
+		focus:MEDIA
 		choix:STRING
 	do
 		choix := ""
@@ -83,15 +83,10 @@ feature{ANY}
 		until(choix.is_equal("q"))
 		loop
 			choix := iu.ask_question("Rechercher un média à modifier(q pour quitter)")
-			focus := rechercher(choix, "")
-			print_medias(focus)
-			if(focus.upper > 0) then
-				choix := iu.ask_question("Quel média voulez-vous modifier?(q pour quitter)")
-				if(choix.to_integer <= focus.upper)then
-					focus.item(choix.to_integer).modifier_media
-				end
-			else
-				io.put_string("Aucun média n'a été trouvé")			
+			focus := select_media(choix)
+			if(focus /= Void) then
+				focus.modifier_media
+				save
 			end
 		end
 	end
@@ -115,7 +110,7 @@ feature{ANY}
 			leslivres.add_last(livre)
 		else		
 		end
-		exporter_medias
+		save
 		io.put_string("Média ajouté avec succés")
 	end
 
@@ -128,15 +123,16 @@ feature{ANY}
 			choix := 1
 		until(choix = 0)
 		loop
-			choix := iu.show_multiple_choice("Recherche rapide;Afficher la liste des medias charges;Afficher les DVD;Afficher les livres","Menu gestion des médias")
+			choix := iu.show_multiple_choice("Recherche rapide;Afficher tous les DVD;Afficher tous les livres;Afficher la liste des medias complètes","Menu gestion des médias")
 			inspect choix
 			when 1 then
-				print_medias(rechercher(iu.ask_question("Entrez votre recherche"), ""))
+				print_medias(rechercher(iu.ask_question("Entrez votre recherche(auteur, année, acteur, etc"), ""))
 			when 2 then
-				afficher_medias(lesmedias)
-			when 3 then
 				afficher_medias(lesdvd)
+			when 3 then
+				afficher_medias(leslivres)
 			when 4 then
+				afficher_medias(lesdvd)
 				afficher_medias(leslivres)
 			else		
 			end
@@ -176,7 +172,7 @@ feature{ANY}
 		Result := res
 	end
 
-	exporter_medias is
+	save is
 	local
 		res:STRING
 		i:INTEGER
@@ -201,6 +197,30 @@ feature{ANY}
 			i := i + 1 
 		end
 		iu.to_file(media_path, res)
+	end
+
+	select_media(term_recherche:STRING):MEDIA is
+	local
+		focus:ARRAY[MEDIA]
+		res:MEDIA
+		choix:STRING
+	do
+		focus := rechercher(term_recherche, "")
+		print_medias(focus)
+		if(focus.upper > 0) then
+			from
+				choix := ""
+			until(choix.is_integer and then choix.to_integer <= focus.upper and then choix.to_integer > 0)
+			loop
+				choix := iu.ask_question("Quel média voulez-vous sélectionner?(q pour quitter)")
+				if(choix.is_integer and then choix.to_integer <= focus.upper and then choix.to_integer > 0)then
+					res := focus.item(choix.to_integer)
+				end
+			end
+		else
+			io.put_string("Aucun média n'a été trouvé%N")			
+		end
+		Result := res
 	end
 
 	print_medias(liste:ARRAY[MEDIA]) is

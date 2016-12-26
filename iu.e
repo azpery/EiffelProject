@@ -20,6 +20,7 @@ feature{ANY}
 	local
 		choice:ARRAY[STRING]
 		padding:INTEGER
+		choix:STRING
 		i:INTEGER
 	do
 		choice := parser.split_string(choices, ';')
@@ -28,8 +29,9 @@ feature{ANY}
 			i := 1
 		until(i = choice.count)
 		loop
-			padding := get_padding(choice.item(i)) 
-			io.put_string(choice.item(i) + get_string_from_char(' ', padding) + i.to_string + "%N")
+			padding := get_padding(choice.item(i)) - 2 
+			choix := choice.item(i) + get_string_from_char(' ', padding) + i.to_string + "%N"
+			io.put_string(choix)
 			i := i+1
 		end
 		padding := get_padding("Retour") - 2
@@ -61,9 +63,28 @@ feature{ANY}
 
 	ask_question(question:STRING):STRING is
 	do
-		io.put_string(question+" :%NVotre réponse:")
+		io.put_string("%N"+question+" :")
 		io.read_line
 		Result := io.last_string
+	end
+	
+	confirm(text:STRING):BOOLEAN is
+	local
+		choix:STRING
+		res:BOOLEAN
+	do
+		from
+			choix := ""
+		until(choix.is_equal("o") or choix.is_equal("n"))
+		loop
+			choix := ask_question(text)
+		end
+		if(choix.is_equal("o"))then
+			res := True
+		else
+			res := False
+		end
+		Result := res
 	end
 
 	put_centered_string(text:STRING; padding_char:CHARACTER) is
@@ -81,14 +102,14 @@ feature{ANY}
 	--Retourne le nombre de charactère on peut mettre à la fin
 	local
 		padding:INTEGER
+		length:INTEGER
 	do
-		if(text.count > nb_char)then
+		length := count(text)
+		if(length > nb_char)then
 			Result := 0
 		else
-			padding := nb_char - text.count
-			if(padding \\ 2 /= 0)then
-				padding := padding - 1
-			end
+			padding := nb_char - length
+			padding := padding - 1
 			Result := padding			
 		end
 	end
@@ -109,11 +130,30 @@ feature{ANY}
 		end
 		Result := vretour
 	end
+	
+	count(other:STRING):INTEGER is
+	--Compte le nombre de caractère en prenant compte les caractère spéciaux
+	local
+		i:INTEGER
+		res:INTEGER
+	do
+		res := 0
+		from
+			i:=1
+		until(i = other.upper)
+		loop
+			if(not other.item(i).is_ascii)then
+				i := i+1
+			end
+			res := res + 1
+			i := i+1
+		end
+		Result := res
+	end
 
 	to_file ( path : STRING; content:STRING ) is
 	local
 		fichier : TEXT_FILE_WRITE
-		i : INTEGER
 	do
 		create fichier.make
 		fichier.connect_to(path)
