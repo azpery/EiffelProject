@@ -22,7 +22,7 @@ feature{ANY}
 			choix := 1
 		until(choix = 0)
 		loop
-			choix := iu.show_multiple_choice("Afficher la liste des utilisateurs chargés;Recharger les utilisateurs;Ajouter un utilisateur;Rechercher un utilisateur","Menu gestion des utilisateurs")
+			choix := iu.show_multiple_choice("Afficher la liste des utilisateurs chargés;Recharger les utilisateurs;Ajouter un utilisateur;Rechercher un utilisateur; Modifier un utilisateur","Menu gestion des utilisateurs")
 			inspect choix
 			when 1 then
 				afficher_utilisateurs
@@ -32,6 +32,8 @@ feature{ANY}
 				ajouter_utilisateur
 			when 4 then
 				rechercher_utilisateurs
+			when 5 then 
+				recherche_modif
 			else		
 			end
 		end
@@ -54,8 +56,8 @@ feature{ANY}
 	do
 		
 		from
-			i := lesutilisateurs.count - 1
-		until(i = 1)
+			i := lesutilisateurs.count - 2
+		until(i = 0)
 		loop
 			utilisateur := lesutilisateurs.item(i)
 			utilisateur.print_utilisateur
@@ -109,6 +111,9 @@ feature{ANY}
 		io.put_string(prenom)
 		create utilisateur.init(id, nom, prenom, isa)
 		lesutilisateurs.add_last(utilisateur)
+		io.put_string(lesutilisateurs.item(1).get_nom)
+		exporter_utilisateur
+		io.put_string(lesutilisateurs.item(1).get_nom)
 		io.put_string("Utilisateur correctement ajouté")
 		
 	end
@@ -197,6 +202,151 @@ feature{ANY}
 			i := i - 1 
 		end
 		Result := resultat_recherche
+	end
+
+
+
+	recherche_modif is
+	local
+		resultat_recherche:ARRAY[UTILISATEUR]
+		choixstr, terme, type:STRING
+		choix, c, j:INTEGER
+		utilisateur:UTILISATEUR
+	do
+		
+		from
+			choix := 1
+		until(choix=0)
+		loop
+			create utilisateur.make
+			create resultat_recherche.make(0,0)
+			choix := iu.show_multiple_choice("Login; Nom; Prénom;","Rechercher par:")
+			inspect choix
+				when 1 then
+					type:="id"
+					io.put_string("Veuillez saisir le terme de la recherche:")
+					io.read_line
+					terme:=io.last_string		
+					resultat_recherche := recherche(terme, type)
+					modifier_utilisateurs(resultat_recherche)
+				when 2 then
+					type:="nom"
+					io.put_string("Veuillez saisir le terme de la recherche:")
+					io.read_line
+					terme:=io.last_string		
+					resultat_recherche := recherche(terme, type)
+					modifier_utilisateurs(resultat_recherche)
+				when 3 then
+					type:="prenom"
+					io.put_string("Veuillez saisir le terme de la recherche:")
+					io.read_line
+					terme:=io.last_string		
+					resultat_recherche := recherche(terme, type)
+					modifier_utilisateurs(resultat_recherche)
+				else		
+			end
+		
+		end
+		exporter_utilisateur	
+	end
+
+
+
+
+	modifier_utilisateurs(resultat_recherche: ARRAY[UTILISATEUR]) is
+	local
+		var, choixstr, terme, type:STRING
+		i, choix, c, j:INTEGER
+		isa:BOOLEAN
+		utilisateur:UTILISATEUR
+	do	
+
+		if(resultat_recherche.count = 1)then
+			io.put_string("Aucun résultat pour la recherche")
+		else
+			from
+				j := 1
+			until(j = resultat_recherche.count)
+			loop
+				utilisateur := resultat_recherche.item(j)
+				io.put_integer(j)
+				io.put_string(":")	
+				utilisateur.print_utilisateur
+				j := j + 1 
+			end
+			choixstr := iu.ask_question("Quel utilisateur voulez-vous modifier?(q pour quitter)")
+			choix:=choixstr.to_integer
+			if(choix <= resultat_recherche.upper)then
+				
+				from
+					c := 1
+				until(c=0)
+				loop
+					c := iu.show_multiple_choice("Modifier le login;Modifier le prénom;Modifier le nom;Modifier le type Admin","Modification de ")
+					inspect c
+						when 1 then
+							var:=""
+							io.put_string("Entrez le nouveau login:")
+							io.put_string("%N")
+							io.read_line
+							var.copy(io.last_string)
+							resultat_recherche.item(choix).set_id(var)
+						when 2 then 
+							var:=""
+							io.put_string("Entrez le nouveau prénom:")
+							io.put_string("%N")
+							io.read_line
+							var.copy(io.last_string)
+							resultat_recherche.item(choix).set_prenom(var)
+						when 3 then 
+							var:=""
+							io.put_string("Entrez le nouveau nom:")
+							io.put_string("%N")
+							io.read_line
+							var.copy(io.last_string)
+							resultat_recherche.item(choix).set_nom(var)
+						when 4 then 
+							var:=""
+							io.put_string("Admin ou non? (Entrez 1 pour admin, 2 sinon)")
+							io.put_string("%N")
+							io.read_line
+							var.copy(io.last_string)
+							if(var.is_equal("1")) then
+								isa:=True
+							else
+								isa:=False
+							end
+							resultat_recherche.item(choix).set_isadmin(isa)
+
+						else
+					end
+				end
+			end
+		end
+		
+	end
+
+
+
+	exporter_utilisateur is
+	local
+		res:STRING
+		i:INTEGER
+		utilisateur:UTILISATEUR
+	do
+		create utilisateur.make
+		res := ""
+		from
+			i := 1
+		until(i = lesutilisateurs.count)
+		loop
+			utilisateur := lesutilisateurs.item(i)
+			io.put_string(utilisateur.get_nom)
+			io.put_string(i.to_string)
+			res := res + "%N" + utilisateur.to_file_string
+			i := i + 1 
+		end
+		iu.to_file("utilisateurs.txt", res)
 	end
 
 

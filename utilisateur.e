@@ -71,6 +71,7 @@ feature {ANY}
 			io.put_string(prenom)
 			io.put_string("%N")
 		end
+
 	to_file_string: STRING is
 		local
 			ligne:STRING
@@ -83,5 +84,6 @@ feature {ANY}
 			Result:= ligne
 		end
 	--
+	
 	
 end 
