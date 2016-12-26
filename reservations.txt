@@ -1,0 +1,2 @@
+utilisateur<anabol> ; media<HP2012> ; annee_reservation<2016> ; jour_reservation<26> ; mois_reservation<12>
+utilisateur<anabol> ; media<How High2001> ; annee_reservation<2016> ; jour_reservation<26> ; mois_reservation<12>

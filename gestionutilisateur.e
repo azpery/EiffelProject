@@ -56,12 +56,12 @@ feature{ANY}
 	do
 		
 		from
-			i := lesutilisateurs.count - 2
-		until(i = 0)
+			i := 2
+		until(i = lesutilisateurs.count - 1)
 		loop
 			utilisateur := lesutilisateurs.item(i)
 			utilisateur.print_utilisateur
-			i := i - 1 
+			i := i + 1 
 		end
 
 	end
@@ -210,8 +210,8 @@ feature{ANY}
 	recherche_modif is
 	local
 		resultat_recherche:ARRAY[UTILISATEUR]
-		choixstr, terme, type:STRING
-		choix, c, j:INTEGER
+		terme, type:STRING
+		choix:INTEGER
 		utilisateur:UTILISATEUR
 	do
 		
@@ -256,8 +256,8 @@ feature{ANY}
 
 	modifier_utilisateurs(resultat_recherche: ARRAY[UTILISATEUR]) is
 	local
-		var, choixstr, terme, type:STRING
-		i, choix, c, j:INTEGER
+		var, choixstr:STRING
+		choix, c, j:INTEGER
 		isa:BOOLEAN
 		utilisateur:UTILISATEUR
 	do	
@@ -338,8 +338,8 @@ feature{ANY}
 		create utilisateur.make
 		res := ""
 		from
-			i := 1
-		until(i = lesutilisateurs.count)
+			i := 2
+		until(i = lesutilisateurs.count - 1)
 		loop
 			utilisateur := lesutilisateurs.item(i)
 			io.put_string(utilisateur.get_nom)

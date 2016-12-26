@@ -30,12 +30,12 @@ feature{ANY}
 		until(i = choice.count)
 		loop
 			padding := get_padding(choice.item(i)) - 2 
-			choix := choice.item(i) + get_string_from_char(' ', padding) + i.to_string + "%N"
+			choix := choice.item(i) + get_string_from_char('_', padding) + i.to_string + "%N"
 			io.put_string(choix)
 			i := i+1
 		end
 		padding := get_padding("Retour") - 2
-		io.put_string("Retour" + get_string_from_char(' ', padding) + "q" + "%N")
+		io.put_string("Retour" + get_string_from_char('_', padding) + "q" + "%N")
 		io.read_line
 		if(io.last_string.is_integer)then
 			Result := io.last_string.to_integer

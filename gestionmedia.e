@@ -7,14 +7,16 @@ feature{}
 	lesmedias:ARRAY[MEDIA]
 	lesdvd:ARRAY[MEDIA]
 	leslivres:ARRAY[MEDIA]
+	mediatheque:MEDIATHEQUE
 	iu:IU
 	media_path:STRING
 
 feature{ANY}
 
-	make is
+	make(m:MEDIATHEQUE) is
 	do
 		media_path := "medias.txt"
+		mediatheque := m
 		init_media
 		create iu.make
 	end
@@ -52,23 +54,6 @@ feature{ANY}
 		lesmedias := parser.parse_media(media_path, "none")
 		lesdvd := parser.parse_media(media_path, "dvd")
 		leslivres := parser.parse_media(media_path, "livre")
-	end
-
-	afficher_medias(liste:ARRAY[MEDIA]) is
-		--Affichage en liste des médias chargés
-	local
-		i:INTEGER
-		media:MEDIA
-	do
-		
-		from
-			i := liste.count - 1
-		until(i = 1)
-		loop
-			media := liste.item(i)
-			media.print_media
-			i := i - 1 
-		end
 	end
 
 	modifier_media is
@@ -126,14 +111,14 @@ feature{ANY}
 			choix := iu.show_multiple_choice("Recherche rapide;Afficher tous les DVD;Afficher tous les livres;Afficher la liste des medias complètes","Menu gestion des médias")
 			inspect choix
 			when 1 then
-				print_medias(rechercher(iu.ask_question("Entrez votre recherche(auteur, année, acteur, etc"), ""))
+				afficher_medias(rechercher(iu.ask_question("Entrez votre recherche(auteur, année, acteur, etc"), ""), True)
 			when 2 then
-				afficher_medias(lesdvd)
+				afficher_medias(lesdvd, True)
 			when 3 then
-				afficher_medias(leslivres)
+				afficher_medias(leslivres, True)
 			when 4 then
-				afficher_medias(lesdvd)
-				afficher_medias(leslivres)
+				afficher_medias(lesdvd, False)
+				afficher_medias(leslivres, False)
 			else		
 			end
 		end
@@ -206,11 +191,11 @@ feature{ANY}
 		choix:STRING
 	do
 		focus := rechercher(term_recherche, "")
-		print_medias(focus)
+		afficher_medias(focus, False)
 		if(focus.upper > 0) then
 			from
 				choix := ""
-			until(choix.is_integer and then choix.to_integer <= focus.upper and then choix.to_integer > 0)
+			until(choix.is_integer and then choix.to_integer <= focus.upper and then choix.to_integer > 0 or choix.is_equal("q"))
 			loop
 				choix := iu.ask_question("Quel média voulez-vous sélectionner?(q pour quitter)")
 				if(choix.is_integer and then choix.to_integer <= focus.upper and then choix.to_integer > 0)then
@@ -223,10 +208,11 @@ feature{ANY}
 		Result := res
 	end
 
-	print_medias(liste:ARRAY[MEDIA]) is
+	afficher_medias(liste:ARRAY[MEDIA]; emprunt:BOOLEAN) is
 	local
 		i:INTEGER
 		media:MEDIA
+		c:STRING
 	do
 		from
 			i :=  1
@@ -236,6 +222,17 @@ feature{ANY}
 			io.put_string("" + i.to_string + "-")
 			media.print_media
 			i := i + 1 
+		end
+		if(emprunt and then iu.confirm("Désirez-vous emprunter un des médias affichés?(o pour oui, n pour non)"))then
+			from
+				c := ""
+			until(c.is_integer and then c.to_integer <= liste.upper and then c.to_integer > 0 or c.is_equal("q"))
+			loop
+				c.copy(iu.ask_question("Quel média voulez-vous sélectionner?(q pour quitter)"))
+				if(c.is_integer and then c.to_integer <= liste.upper and then c.to_integer > 0)then
+					mediatheque.get_gestion_emprunt.make_emprunt(liste.item(c.to_integer))
+				end
+			end
 		end
 	end
 

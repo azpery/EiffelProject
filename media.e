@@ -60,6 +60,13 @@ feature {ANY}
 		end
 		Result := emprunt
 	end
+
+	add_exemplaire is
+	--Ajout d'un exemplaire au media
+	do
+		nbexemplaire := nbexemplaire + 1
+	end	
+
 	print_media is deferred end
 
 	is_equals(object:MEDIA):BOOLEAN is deferred end
