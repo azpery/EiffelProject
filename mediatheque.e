@@ -22,7 +22,7 @@ feature {ANY}
 	do
 		create gestion_utilisateur.make
 		utilisateur := gestion_utilisateur.recherche("anabol","id").item(1)
-		create gestion_media.make
+		create gestion_media.make(Current)
 		create gestion_emprunt.make(Current)
 		create iu.make
 		if(utilisateur.get_isadmin)then
@@ -50,7 +50,9 @@ feature {ANY}
 	--Menu administrateur
 	local
 		choice:INTEGER
+		p:PARSER
 	do
+		create p.make
 		gestion_emprunt.print_retards
 		iu.put_centered_string("Bienvenue "+utilisateur.get_prenom, '*')
 		from 
@@ -65,6 +67,8 @@ feature {ANY}
 				gestion_media.enter
 			when 3 then
 				gestion_emprunt.enter
+			when 4 then
+				p.not_bad
 			else
 			
 			end

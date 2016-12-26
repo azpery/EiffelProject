@@ -93,6 +93,11 @@ feature {ANY}
 		Result := date_emprunt.day.to_string +"/"+date_emprunt.month.to_string+"/"+ date_emprunt.year.to_string
 	end
 
+	get_date_time_emprunt:TIME is
+	do
+		Result := date_emprunt
+	end
+
 	get_date_retour:STRING is
 	do
 		Result := date_retour.day.to_string +"/"+date_retour.month.to_string+"/"+ date_retour.year.to_string
@@ -169,6 +174,17 @@ feature {ANY}
 		Result := res.floor.force_to_integer_32
 	end
 		
+	is_equals(r:EMPRUNT):BOOLEAN is
+	--retourner vrai s'il s'agit du même emprunt	
+	local
+		res:BOOLEAN
+	do
+		res := False
+		if(r.get_media.get_class.is_equal(media.get_class) and then r.get_media.is_equals(media) and then utilisateur.get_id.is_equal(r.get_utilisateur.get_id) and then r.get_date_emprunt.is_equal(get_date_emprunt)) then
+			res := True
+		end
+		Result := res
+	end
 
 	to_string(iu:IU) is
 	local

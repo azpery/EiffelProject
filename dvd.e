@@ -24,6 +24,8 @@ feature{ANY}
 	end
 
 	set_annee (a : STRING) is
+	require
+		is_integer: a.is_integer
 	do
 		annee := a
 	end
@@ -44,12 +46,16 @@ feature{ANY}
 	end
 
 	add_acteur (a : STRING) is
+	require
+		not_empty: not a.is_empty
 	local
 		new_acteur:STRING
 	do
 		new_acteur := ""
 		new_acteur.copy(a)
 		acteur.add_last(new_acteur)
+	ensure 
+		has_acteur: acteur_contains(a)
 	end
 
 	get_acteur : ARRAY[STRING] is
@@ -164,9 +170,6 @@ feature{ANY}
 				i := i - 1 
 			end
 		end
-	
-
-
 
 	is_equals(object:DVD):BOOLEAN is
 	do
@@ -202,7 +205,7 @@ feature{ANY}
 		res := False
 		from
 			i := 1
-		until(i = acteur.upper)
+		until(i = acteur.count )
 		loop
 			if(acteur.item(i).is_equal(s))then	
 				res := True

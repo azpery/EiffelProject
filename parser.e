@@ -13,6 +13,45 @@ feature {}
 		end
 
 feature {ANY}
+	parse_reservation(file:STRING; gu:GESTIONUTILISATEUR; gm:GESTIONMEDIA):ARRAY[RESERVATION] is
+	--Function de parse d'un fichier qui permet de renvoyer une liste d'emprunt
+	local
+		lesreservations:ARRAY[RESERVATION]
+		nouvel_reservation:RESERVATION
+		arr:ARRAY[STRING]
+		i:INTEGER
+	do
+		create lesreservations.make(0,0)
+		create nouvel_reservation.make
+		arr := parse(file)
+		if(arr.upper > 3) then
+			from
+				i := 1
+			until i = arr.upper
+			loop
+				if(arr.item(i).is_equal("utilisateur"))then
+					nouvel_reservation.set_utilisateur(gu.recherche(arr.item(i+1), "id").item(1))
+				elseif(arr.item(i).is_equal("media"))then
+					nouvel_reservation.set_media(gm.rechercher(arr.item(i+1), "id").item(1))
+				elseif(arr.item(i).is_equal("annee_reservation"))then
+					nouvel_reservation.set_annee_reservation(arr.item(i+1).to_integer)
+				elseif(arr.item(i).is_equal("mois_reservation"))then
+					nouvel_reservation.set_mois_reservation(arr.item(i+1).to_integer)
+				elseif(arr.item(i).is_equal("jour_reservation"))then
+					nouvel_reservation.set_jour_reservation(arr.item(i+1).to_integer)
+				elseif(arr.item(i).is_equal("\e"))then
+					nouvel_reservation.update_date_fin
+					if(nouvel_reservation.is_still_available)then
+						lesreservations.add_last(nouvel_reservation)
+					end
+					create nouvel_reservation.make
+				end 
+				i := i + 1
+			end
+		end
+		Result := lesreservations	
+	end
+	
 	parse_emprunt(file:STRING; gu:GESTIONUTILISATEUR; gm:GESTIONMEDIA):ARRAY[EMPRUNT] is
 	--Function de parse d'un fichier qui permet de renvoyer une liste d'emprunt
 	local
@@ -109,7 +148,9 @@ feature {ANY}
 		nouveau_dvd:DVD
 		arr:ARRAY[STRING]
 		current_type:STRING
+		found:BOOLEAN
 		i:INTEGER
+		j:INTEGER
 	do
 		create lesmedias.make(0,0)
 		create nouveau_livre.make
@@ -147,14 +188,40 @@ feature {ANY}
 			end
 			if(arr.item(i).is_equal("\e"))then
 				if(current_type.is_equal("livre") and filter.is_equal("livre") or filter.is_equal("none")) then
-					lesmedias.add_last(nouveau_livre)		
+					found := False
+					from
+						j := 1
+					until j = lesmedias.count
+					loop
+						if(lesmedias.item(j).is_equals(nouveau_livre))then
+							found := True
+							lesmedias.item(j).add_exemplaire
+						end
+						j := j + 1
+					end
+					if(not found)then
+						lesmedias.add_last(nouveau_livre)
+					end		
 				else if(current_type.is_equal("dvd") and filter.is_equal("dvd") or filter.is_equal("none")) then
-					lesmedias.add_last(nouveau_dvd)
+					found := False
+					from
+						j := 1
+					until j = lesmedias.count
+					loop
+						if(lesmedias.item(j).is_equals(nouveau_dvd))then
+							found := True
+							lesmedias.item(j).add_exemplaire
+						end
+						j := j + 1
+					end
+					if(not found)then
+						lesmedias.add_last(nouveau_dvd)
+					end
 				end
-				end
-				
-				create nouveau_livre.make
-				create nouveau_dvd.make
+			end
+			
+			create nouveau_livre.make
+			create nouveau_dvd.make
 			end
 			  
 			i := i + 1
@@ -211,6 +278,22 @@ feature {ANY}
 		reader.disconnect
 		Result := vreturn
 	end
+
+	not_bad is
+	local
+		reader:TEXT_FILE_READ
+	do
+		create reader.make
+		reader.connect_to("not_bad.txt")
+		from
+		until(reader.end_of_input)
+		loop
+			reader.read_line
+			io.put_string("%N                       "+reader.last_string)
+		end
+		reader.disconnect
+	end
+	
 
 	split_string(string:STRING; delimiter:CHARACTER):ARRAY[STRING] is
 	--Prend en entrée une chaine de character et la découpe à l'aide du délimiteur
