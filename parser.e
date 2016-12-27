@@ -109,31 +109,33 @@ feature {ANY}
 		create lesutilisateurs.make(0,0)
 		create nouvel_utilisateur.make
 		arr := parse(file)
-		from
-			i := 1
-		until i = arr.count
-		loop
+		if(arr.upper > 3) then
+			from
+				i := 1
+			until i = arr.count
+			loop
 			
-			if(arr.item(i).is_equal("nom"))then
-				nouvel_utilisateur.set_nom(arr.item(i+1))
-			end
-			if(arr.item(i).is_equal("prenom"))then
-				nouvel_utilisateur.set_prenom(arr.item(i+1))
-			end
-			if(arr.item(i).is_equal("identifiant"))then
-				nouvel_utilisateur.set_id(arr.item(i+1))
-			end
-			if(arr.item(i).is_equal("admin"))then
-				if(arr.item(i+1).is_equal("OUI"))then
-					nouvel_utilisateur.set_isadmin(True)
+				if(arr.item(i).is_equal("nom"))then
+					nouvel_utilisateur.set_nom(arr.item(i+1))
 				end
+				if(arr.item(i).is_equal("prenom"))then
+					nouvel_utilisateur.set_prenom(arr.item(i+1))
+				end
+				if(arr.item(i).is_equal("identifiant"))then
+					nouvel_utilisateur.set_id(arr.item(i+1))
+				end
+				if(arr.item(i).is_equal("admin"))then
+					if(arr.item(i+1).is_equal("OUI"))then
+						nouvel_utilisateur.set_isadmin(True)
+					end
+				end
+				if(arr.item(i).is_equal("\e"))then
+					lesutilisateurs.add_last(nouvel_utilisateur)
+					create nouvel_utilisateur.make
+				end
+				  
+				i := i + 1
 			end
-			if(arr.item(i).is_equal("\e"))then
-				lesutilisateurs.add_last(nouvel_utilisateur)
-				create nouvel_utilisateur.make
-			end
-			  
-			i := i + 1
 		end
 		
 		Result := lesutilisateurs	

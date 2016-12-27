@@ -26,24 +26,11 @@ feature {}
 		end
 
 feature {ANY}
-	set_titre(i:STRING) is
-		do
-			titre := i
-		end
-	get_titre : STRING is
-		do
-			Result := titre
-		end
 
-	set_nbexemplaire(p:INTEGER) is
-		do
-			nbexemplaire := p
-		end
-	get_nbexemplaire : INTEGER is
-		do
-			Result := nbexemplaire
-		end
 	add_emprunt(utilisateur:UTILISATEUR):EMPRUNT is
+	--Prend en paramètre un utilisateur et renvoie un emprunt Void ou non si l'utilisateur décide d'annuler ou si il y a pas la queantité suffisante
+	require
+		utilisateur_correct: utilisateur /= Void
 	local
 		emprunt:EMPRUNT
 	do
@@ -80,7 +67,22 @@ feature {ANY}
 	set_media is deferred end
 
 	modifier_media is deferred end
-
+	--GETTER SETTER
 	get_id:STRING is deferred end
-
-end -- class TOWER
+	set_titre(i:STRING) is
+	do
+		titre := i
+	end
+	get_titre : STRING is
+	do
+		Result := titre
+	end
+	set_nbexemplaire(p:INTEGER) is
+	do
+		nbexemplaire := p
+	end
+	get_nbexemplaire : INTEGER is
+	do
+		Result := nbexemplaire
+	end
+end -- class MEDIA

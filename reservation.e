@@ -23,64 +23,6 @@ feature {ANY}
 		date_reservation.update
 		update_date_fin
 	end
-
-	set_annee_reservation(a:INTEGER) is
-	local
-		res:BOOLEAN
-	do
-		res := date_reservation.set(a, date_reservation.month, date_reservation.day, 12, 0, 0)
-	end
-
-	set_jour_reservation(j:INTEGER) is
-	local
-		res:BOOLEAN
-	do
-		res := date_reservation.set(date_reservation.year, date_reservation.month, j, 12, 0, 0)
-	end
-
-	set_mois_reservation(m:INTEGER) is
-	local
-		res:BOOLEAN
-	do
-		res := date_reservation.set(date_reservation.year, m, date_reservation.day, 12, 0, 0)
-	end
-
-	set_date_reservation(a:INTEGER; m:INTEGER; j:INTEGER)is
-	local
-		res:BOOLEAN
-	do
-		res := date_reservation.set(a, m, j, 12, 0, 0)
-	end
-
-	get_date_reservation:STRING is
-	do
-		Result := date_reservation.day.to_string +"/"+date_reservation.month.to_string+"/"+ date_reservation.year.to_string
-	end
-
-	get_date_fin:STRING is
-	do
-		Result := date_fin.day.to_string +"/"+date_fin.month.to_string+"/"+ date_fin.year.to_string
-	end
-
-	get_utilisateur:UTILISATEUR is
-	do
-		Result := utilisateur
-	end
-
-	get_media:MEDIA is
-	do
-		Result := media
-	end
-
-	set_utilisateur(u:UTILISATEUR) is
-	do
-		utilisateur := u
-	end
-
-	set_media(m:MEDIA) is
-	do
-		media := m
-	end
 	
 	update_date_fin is
 	do
@@ -127,6 +69,69 @@ feature {ANY}
 			res := True
 		end
 		Result := res
+	end
+
+	--GETTER SETTER
+	set_annee_reservation(a:INTEGER) is
+	local
+		res:BOOLEAN
+	do
+		res := date_reservation.set(a, date_reservation.month, date_reservation.day, 12, 0, 0)
+	end
+
+	set_jour_reservation(j:INTEGER) is
+	require 
+		jour_correct:j>0 and j<=31
+	local
+		res:BOOLEAN
+	do
+		res := date_reservation.set(date_reservation.year, date_reservation.month, j, 12, 0, 0)
+	end
+
+	set_mois_reservation(m:INTEGER) is
+	require 
+		mois_correct:m>0 and m<=12
+	local
+		res:BOOLEAN
+	do
+		res := date_reservation.set(date_reservation.year, m, date_reservation.day, 12, 0, 0)
+	end
+
+	set_date_reservation(a:INTEGER; m:INTEGER; j:INTEGER)is
+	local
+		res:BOOLEAN
+	do
+		res := date_reservation.set(a, m, j, 12, 0, 0)
+	end
+
+	get_date_reservation:STRING is
+	do
+		Result := date_reservation.day.to_string +"/"+date_reservation.month.to_string+"/"+ date_reservation.year.to_string
+	end
+
+	get_date_fin:STRING is
+	do
+		Result := date_fin.day.to_string +"/"+date_fin.month.to_string+"/"+ date_fin.year.to_string
+	end
+
+	get_utilisateur:UTILISATEUR is
+	do
+		Result := utilisateur
+	end
+
+	get_media:MEDIA is
+	do
+		Result := media
+	end
+
+	set_utilisateur(u:UTILISATEUR) is
+	do
+		utilisateur := u
+	end
+
+	set_media(m:MEDIA) is
+	do
+		media := m
 	end
 
 end -- class reservation

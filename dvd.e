@@ -23,60 +23,6 @@ feature{ANY}
 		type := "Pas de type"
 	end
 
-	set_annee (a : STRING) is
-	require
-		is_integer: a.is_integer
-	do
-		annee := a
-	end
-
-	get_annee : STRING is
-	do
-		Result := annee
-	end
-
-	set_realisateur (r : STRING) is
-	do
-		realisateur := r
-	end
-
-	get_realisateur : STRING is
-	do
-		Result := realisateur
-	end
-
-	add_acteur (a : STRING) is
-	require
-		not_empty: not a.is_empty
-	local
-		new_acteur:STRING
-	do
-		new_acteur := ""
-		new_acteur.copy(a)
-		acteur.add_last(new_acteur)
-	ensure 
-		has_acteur: acteur_contains(a)
-	end
-
-	get_acteur : ARRAY[STRING] is
-	do
-		Result := acteur
-	end
-
-	set_type (r : STRING) is
-	do
-		type := r
-	end
-
-	get_type : STRING is
-	do
-		Result := type
-	end
-	get_class:STRING is
-	do
-		Result := "DVD"
-	end
-
 	set_media is
 		--Méthode pour renseigner tous les champs de l'objet
 	local
@@ -136,6 +82,7 @@ feature{ANY}
 	end
 
 	print_media is
+	--Affichage du média
 	do
 		
 		iu.put_centered_string(titre, '*')
@@ -155,31 +102,35 @@ feature{ANY}
 	end
 	
 	print_acteur is
-		local
-			i:INTEGER
-		do
-			i := acteur.count - 1
-			if(i > 0) then
-				io.put_string("Liste des acteurs présents: %N")
-			end			
-			from
-				i := acteur.count - 1
-			until(i = 0)
-			loop
-				io.put_string("- " + acteur.item(i) + "%N")
-				i := i - 1 
-			end
-		end
-
-	is_equals(object:DVD):BOOLEAN is
+	--Affichage des acteurs
+	local
+		i:INTEGER
 	do
-		Result := False
-		if(object.get_realisateur.is_equal(get_realisateur) and object.get_titre.is_equal(get_titre))then
-			Result := True
+		i := acteur.count - 1
+		if(i > 0) then
+			io.put_string("Liste des acteurs présents: %N")
+		end			
+		from
+			i := acteur.count - 1
+		until(i = 0)
+		loop
+			io.put_string("- " + acteur.item(i) + "%N")
+			i := i - 1 
 		end
 	end
 
+	is_equals(object:DVD):BOOLEAN is
+	-- retourne vrai si c'est le même dvd
+	require 
+		not_void: object /= Void
+	do
+		Result := object.get_realisateur.is_equal(get_realisateur) and object.get_titre.is_equal(get_titre)
+	end
+
 	is_equal_to(terme:STRING; t:STRING):BOOLEAN is
+	--Retourne vrai s'il le dvd correspond aux critères de recherche
+	--Si le type t de recherche est vide, il recherchera dans tous les champs du dvd
+	--On peut rechercher avec l'année , lee type le nom du réalisateur ou l'id
 	do
 		Result := False
 		if(t.is_equal("annee") and get_annee.is_equal(terme))then
@@ -198,6 +149,7 @@ feature{ANY}
 	end
 
 	acteur_contains(s:STRING):BOOLEAN is
+	--Vérifie si s est acteur jouant dans le film
 	local
 		i:INTEGER
 		res:BOOLEAN
@@ -216,11 +168,15 @@ feature{ANY}
 	end
 	
 	to_file_string:STRING is
+	--Retourne l'objet pour l'export dans le fichier
 	do
 		Result := "DVD ; Titre<"+titre+"> ; Annee<"+annee+"> ; Realisateur<"+realisateur+">"+acteur_to_string + "; Nombre<"+nbexemplaire.to_string+">"
+	ensure 
+		not_empty: not Result.is_empty
 	end
 
 	acteur_to_string:STRING is
+	--Retourne la liste des acteur, formaté pour être affiché
 	local
 		i:INTEGER
 		res:STRING
@@ -241,6 +197,60 @@ feature{ANY}
 	do
 		Result := titre+annee
 	end
+	
+	--GETTER SETTER
+	set_annee (a : STRING) is
+	require
+		is_integer: a.is_integer
+	do
+		annee := a
+	end
 
+	get_annee : STRING is
+	do
+		Result := annee
+	end
+
+	set_realisateur (r : STRING) is
+	do
+		realisateur := r
+	end
+
+	get_realisateur : STRING is
+	do
+		Result := realisateur
+	end
+
+	add_acteur (a : STRING) is
+	require
+		not_empty: not a.is_empty
+	local
+		new_acteur:STRING
+	do
+		new_acteur := ""
+		new_acteur.copy(a)
+		acteur.add_last(new_acteur)
+	ensure 
+		has_acteur: acteur_contains(a)
+	end
+
+	get_acteur : ARRAY[STRING] is
+	do
+		Result := acteur
+	end
+
+	set_type (r : STRING) is
+	do
+		type := r
+	end
+
+	get_type : STRING is
+	do
+		Result := type
+	end
+	get_class:STRING is
+	do
+		Result := "DVD"
+	end
 
 end -- class LIVRE

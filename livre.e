@@ -16,22 +16,8 @@ feature{ANY}
 		auteur := "Pas d'auteur"
 	end
 
-	set_auteur (a : STRING) is
-	do
-		auteur := a
-	end
-
-	get_auteur : STRING is
-	do
-		Result := auteur
-	end
-	get_class:STRING is
-	do
-		Result := "LIVRE"
-	end
-
 	set_media is
-		--Méthode pour renseigner tous les champs de l'objet
+	--Méthode pour renseigner tous les champs de l'objet
 	do
 		titre.copy(iu.ask_question("Renseigner le titre"))
 		auteur.copy(iu.ask_question("Renseigner l'auteur"))
@@ -39,7 +25,7 @@ feature{ANY}
 	end
 
 	modifier_media is
-		--Méthode pour renseigner tous les champs de l'objet
+	--Méthode pour renseigner tous les champs de l'objet
 	local
 		choix:STRING
 		c:INTEGER
@@ -63,6 +49,7 @@ feature{ANY}
 	end
 
 	print_media is
+	--Affiche le livre
 	do
 		iu.put_centered_string(titre, '*')
 		io.put_string("%N")
@@ -75,19 +62,23 @@ feature{ANY}
 	end
 
 	to_file_string:STRING is
+	--Retourne l'objet prêt pour l'export vers un fichier
 	do
 		Result := "Livre ; Titre<"+titre+"> ; Auteur<"+auteur+"> ; Nombre<"+nbexemplaire.to_string+">" 
+	ensure 
+		not_empty: not Result.is_empty
 	end
 
 	is_equals(object:LIVRE):BOOLEAN is
+	--Retourne vrai si l'auteur est le même et le titre est le même
 	do
-		Result := False
-		if(object.get_auteur.is_equal(get_auteur) and object.get_titre.is_equal(get_titre))then
-			Result := True
-		end
+		Result := object.get_auteur.is_equal(get_auteur) and object.get_titre.is_equal(get_titre)
 	end
 
 	is_equal_to(terme:STRING; t:STRING):BOOLEAN is
+	--Retourne vrai s'il le dvd correspond aux critères de recherche
+	--Si le type t de recherche est vide, il recherchera dans tous les champs du livre
+	--On peut rechercher avec le titre, le nom de l'auteur ou l'id 
 	do
 		Result := False
 		if(t.is_equal("titre") and get_titre.is_equal(terme))then
@@ -105,6 +96,21 @@ feature{ANY}
 	--Retourne un identifiant unique au média
 	do
 		Result := titre+auteur
+	end
+
+	--GETTER SETTER
+	set_auteur (a : STRING) is
+	do
+		auteur := a
+	end
+
+	get_auteur : STRING is
+	do
+		Result := auteur
+	end
+	get_class:STRING is
+	do
+		Result := "LIVRE"
 	end
 
 end -- class LIVRE

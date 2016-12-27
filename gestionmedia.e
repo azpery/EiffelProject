@@ -46,7 +46,7 @@ feature{ANY}
 	end
 
 	init_media is
-		--Chargement des médias 
+	--Chargement des médias 
 	local
 		parser:PARSER
 	do
@@ -100,7 +100,7 @@ feature{ANY}
 	end
 
 	rechercher_media is
-		--Menu de recherche de média
+	--Menu de recherche de média
 	local
 		choix:INTEGER
 	do
@@ -209,6 +209,7 @@ feature{ANY}
 	end
 
 	afficher_medias(liste:ARRAY[MEDIA]; emprunt:BOOLEAN) is
+	--Prend en paramètre une liste de média l'affiche et si media est True, on propose de louer un des médias.
 	local
 		i:INTEGER
 		media:MEDIA
@@ -223,7 +224,7 @@ feature{ANY}
 			media.print_media
 			i := i + 1 
 		end
-		if(emprunt and then iu.confirm("Désirez-vous emprunter un des médias affichés?(o pour oui, n pour non)"))then
+		if(liste.count > 0 and then emprunt and then iu.confirm("Désirez-vous emprunter un des médias affichés?(o pour oui, n pour non)"))then
 			from
 				c := ""
 			until(c.is_integer and then c.to_integer <= liste.upper and then c.to_integer > 0 or c.is_equal("q"))
@@ -236,4 +237,4 @@ feature{ANY}
 		end
 	end
 
-end -- class IU
+end -- class GESTIONMEDIA

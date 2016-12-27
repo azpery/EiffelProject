@@ -17,6 +17,8 @@ feature{}
 feature{ANY}
 
 	make(m:MEDIATHEQUE) is
+	require
+		mediatheque:m /= Void
 	do
 		emprunt_path := "emprunts.txt"
 		reservation_path := "reservations.txt"
@@ -59,68 +61,8 @@ feature{ANY}
 		end
 	end
 
-	init_emprunt is
-		--Chargement des emprunts 
-	local
-		parser:PARSER
-	do
-		create parser.make
-		lesemprunts := parser.parse_emprunt(emprunt_path, mediatheque.get_gestion_utilisateur, mediatheque.get_gestion_media)
-	end
-
-	init_mes_emprunts is
-		--Chargement des emprunts 
-	local
-		i:INTEGER
-		emprunt:EMPRUNT
-		id:STRING
-	do
-		id := mediatheque.get_authenticated_user.get_id
-		create mesemprunts.make(0,0)
-		from
-			i :=  1
-		until(i = lesemprunts.count)
-		loop
-			emprunt := lesemprunts.item(i)
-			if(emprunt.get_utilisateur.get_id.is_equal(id))then
-				mesemprunts.add_last(emprunt)
-			end
-			i := i + 1 
-		end
-		mesempruntsnonrendu := get_emprunts_non_rendu(mesemprunts)
-	end
-
-	init_reservation is
-		--Chargement des réservations 
-	local
-		parser:PARSER
-	do
-		create parser.make
-		lesreservations := parser.parse_reservation(reservation_path, mediatheque.get_gestion_utilisateur, mediatheque.get_gestion_media)
-	end
-
-	init_mes_reservations is
-		--Chargement de mes réservations 
-	local
-		i:INTEGER
-		reservation:RESERVATION
-		id:STRING
-	do
-		id := mediatheque.get_authenticated_user.get_id
-		create mesreservations.make(0,0)
-		from
-			i :=  1
-		until(i = lesreservations.count)
-		loop
-			reservation := lesreservations.item(i)
-			if(reservation.get_utilisateur.get_id.is_equal(id))then
-				mesreservations.add_last(reservation)
-			end
-			i := i + 1 
-		end
-	end
-
 	add_emprunt is
+	--Méthode  d'ajout d'emprunt
 	local
 		choix:STRING
 		focus:MEDIA
@@ -131,36 +73,14 @@ feature{ANY}
 		loop
 			choix := iu.ask_question("Rechercher un média à emprunter(q pour quitter)")
 			focus := mediatheque.get_gestion_media.select_media(choix)
-			make_emprunt(focus)
-		end
-	end
-
-	make_emprunt(m:MEDIA) is
-	--Création d'un emprunt depuis un média
-	local
-		emprunt:EMPRUNT
-		available:BOOLEAN
-	do
-		available := is_media_available(m)
-		if(m /= Void and then available) then
-			emprunt := m.add_emprunt(mediatheque.get_authenticated_user)
-			if(emprunt /= Void) then
-				lesemprunts.add_last(emprunt)
-				mesemprunts.add_last(emprunt)
-				save
-				mediatheque.get_gestion_media.save
-				io.put_string("Emprunt ajouté")
-			else
-				if(not did_made_reservation(m) and then iu.confirm("Ce média n'est actuellement pas disponible, mais désirez vous le réserver?(o pour oui"))then
-					make_reservation(m)
-				end
+			if(focus /= Void)then
+				make_emprunt
 			end
-		elseif(not available)then
-			io.put_string("Désolé, quelqu'un a déjà réservé ce média, vous ne pouvez pas l'emprunter.")
 		end
 	end
 
 	check_reservation_available is
+	--Vérifie si une des réservations faite par l'utilisateur est de nouveau disponible.
 	local
 		i:INTEGER
 		reservation:RESERVATION
@@ -186,7 +106,37 @@ feature{ANY}
 		end
 	end
 
+	make_emprunt(m:MEDIA) is
+	--Création d'un emprunt depuis un média
+	require
+		m_not_void: m /= Void
+	local
+		emprunt:EMPRUNT
+		available:BOOLEAN
+	do
+		available := is_media_available(m)
+		if(available) then
+			emprunt := m.add_emprunt(mediatheque.get_authenticated_user)
+			if(emprunt /= Void) then
+				lesemprunts.add_last(emprunt)
+				mesemprunts.add_last(emprunt)
+				save
+				mediatheque.get_gestion_media.save
+				io.put_string("Emprunt ajouté")
+			else
+				if(not did_made_reservation(m) and then iu.confirm("Ce média n'est actuellement pas disponible, mais désirez vous le réserver?(o pour oui"))then
+					make_reservation(m)
+				end
+			end
+		elseif(not available)then
+			io.put_string("Désolé, quelqu'un a déjà réservé ce média, vous ne pouvez pas l'emprunter.")
+		end
+	end
+
 	make_reservation(m:MEDIA)is
+	--Création d'une réservation à partir d'un média
+	require
+		media_not_void: m /= Void
 	local
 		res:RESERVATION
 	do
@@ -218,6 +168,23 @@ feature{ANY}
 			if(other.get_class.is_equal(m.get_class) and then other.is_equals(m))then
 				res := True
 			end
+			i := i + 1 
+		end
+		Result := res
+	end
+
+	did_made_emprunt(e:EMPRUNT):BOOLEAN is
+	local
+		i:INTEGER
+		emprunt:EMPRUNT
+		res:BOOLEAN
+	do
+		res := False
+		from
+			i :=  1
+		until(i >= lesemprunts.count)
+		loop
+			res := lesemprunts.item(i).is_equals(e) or res
 			i := i + 1 
 		end
 		Result := res
@@ -434,26 +401,6 @@ feature{ANY}
 		end
 	end
 
-	get_emprunts_non_rendu(liste:ARRAY[EMPRUNT]):ARRAY[EMPRUNT] is
-	local
-		res:ARRAY[EMPRUNT]
-		emprunt:EMPRUNT
-		i:INTEGER
-	do
-		create res.make(0,0)
-		from
-			i :=  1
-		until(i = liste.count)
-		loop
-			emprunt := liste.item(i)
-			if(not emprunt.get_is_rendu) then
-				res.add_last(emprunt)
-			end
-			i := i + 1 
-		end
-		Result := res
-	end
-
 	get_mesemprunts:ARRAY[EMPRUNT] is
 	do
 		Result := mesemprunts
@@ -517,5 +464,87 @@ feature{ANY}
 		Result := res
 	end
 	
+	--INITIALISATIONS
+	
+	init_emprunt is
+		--Chargement des emprunts 
+	local
+		parser:PARSER
+	do
+		create parser.make
+		lesemprunts := parser.parse_emprunt(emprunt_path, mediatheque.get_gestion_utilisateur, mediatheque.get_gestion_media)
+	end
+
+	init_mes_emprunts is
+		--Chargement des emprunts 
+	local
+		i:INTEGER
+		emprunt:EMPRUNT
+		id:STRING
+	do
+		id := mediatheque.get_authenticated_user.get_id
+		create mesemprunts.make(0,0)
+		from
+			i :=  1
+		until(i = lesemprunts.count)
+		loop
+			emprunt := lesemprunts.item(i)
+			if(emprunt.get_utilisateur.get_id.is_equal(id))then
+				mesemprunts.add_last(emprunt)
+			end
+			i := i + 1 
+		end
+		mesempruntsnonrendu := get_emprunts_non_rendu(mesemprunts)
+	end
+
+	init_reservation is
+		--Chargement des réservations 
+	local
+		parser:PARSER
+	do
+		create parser.make
+		lesreservations := parser.parse_reservation(reservation_path, mediatheque.get_gestion_utilisateur, mediatheque.get_gestion_media)
+	end
+
+	init_mes_reservations is
+		--Chargement de mes réservations 
+	local
+		i:INTEGER
+		reservation:RESERVATION
+		id:STRING
+	do
+		id := mediatheque.get_authenticated_user.get_id
+		create mesreservations.make(0,0)
+		from
+			i :=  1
+		until(i = lesreservations.count)
+		loop
+			reservation := lesreservations.item(i)
+			if(reservation.get_utilisateur.get_id.is_equal(id))then
+				mesreservations.add_last(reservation)
+			end
+			i := i + 1 
+		end
+	end
+
+	get_emprunts_non_rendu(liste:ARRAY[EMPRUNT]):ARRAY[EMPRUNT] is
+	local
+		res:ARRAY[EMPRUNT]
+		emprunt:EMPRUNT
+		i:INTEGER
+	do
+		create res.make(0,0)
+		from
+			i :=  1
+		until(i = liste.count)
+		loop
+			emprunt := liste.item(i)
+			if(not emprunt.get_is_rendu) then
+				res.add_last(emprunt)
+			end
+			i := i + 1 
+		end
+		Result := res
+	end
 
 end -- class gestionemprunt
