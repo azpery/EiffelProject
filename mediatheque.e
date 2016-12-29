@@ -11,6 +11,7 @@ feature {}
 	gestion_utilisateur:GESTIONUTILISATEUR
 	gestion_media:GESTIONMEDIA
 	gestion_emprunt:GESTIONEMPRUNT
+	statistique:STATISTIQUE
 	utilisateur:UTILISATEUR
 	iu:IU
 
@@ -19,12 +20,56 @@ feature {ANY}
 		-- Creation du jeu et boucle principale
 	local
 		choice:INTEGER
+		logsvalide:BOOLEAN
+		id, nom:STRING
+		i:INTEGER
 	do
+		id := ""
+		nom := ""
 		create gestion_utilisateur.make
-		utilisateur := gestion_utilisateur.recherche("anabol","id").item(1)
+		from
+			logsvalide := False
+		until(logsvalide)
+		loop
+			io.put_string("BIENVENNUE DANS LA MEDIATHEQUE" + "%N")
+			io.put_string("Veuillez vous authentifier:" + "%N")
+			io.put_string("Identifiant:" + "%N")
+			io.read_line
+			id.copy(io.last_string)
+			io.put_string("Nom:" + "%N")
+			io.read_line
+			nom.copy(io.last_string)
+			if(gestion_utilisateur.recherche(id,"id").count > 1)then
+				from
+					i := gestion_utilisateur.recherche(id,"id").count - 1
+				until(i = 0 or logsvalide)
+				loop
+					
+					utilisateur := gestion_utilisateur.recherche(id,"id").item(i)
+					if(utilisateur.get_nom.is_equal(nom)) then
+						logsvalide := True
+						
+					else	
+						
+					end
+					i := i - 1					
+				end				
+				if(logsvalide) then
+					io.put_string("Authentification réussie" + "%N")
+				else
+					io.put_string("Combinaison login/Nom invalide" + "%N")
+				end
+			else				
+				io.put_string("Identifiant invalide" + "%N")
+			end
+					
+			
+		end
+		--utilisateur := gestion_utilisateur.recherche("anabol","id").item(1)
 		create gestion_media.make(Current)
 		create gestion_emprunt.make(Current)
 		create iu.make
+		create statistique.make(Current)
 		if(utilisateur.get_isadmin)then
 			from 
 			choice := 1
@@ -59,7 +104,7 @@ feature {ANY}
 		choice := 1
 		until(choice = 0)
 		loop
-			choice := iu.show_multiple_choice("Gérer les utilisateurs;Gérer les médias;Gérer les emprunts", "Menu principal")
+			choice := iu.show_multiple_choice("Gérer les utilisateurs;Gérer les médias;Gérer les emprunts;Statistiques", "Menu principal")
 			inspect choice
 			when 1 then
 				gestion_utilisateur.enter
@@ -68,6 +113,8 @@ feature {ANY}
 			when 3 then
 				gestion_emprunt.enter
 			when 4 then
+				statistique.enter
+			when 5 then
 				p.not_bad
 			else
 			

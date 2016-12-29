@@ -39,7 +39,12 @@ feature{ANY}
 		end
 	end
 
-	init_util is
+	get_all_user:ARRAY[UTILISATEUR] is
+	do
+		Result:=lesutilisateurs
+	end
+
+	init_util is	
 		--Chargement des utilisateurs 
 	local
 		parser:PARSER
@@ -56,8 +61,8 @@ feature{ANY}
 	do
 		
 		from
-			i := 2
-		until(i = lesutilisateurs.count - 1)
+			i := 1
+		until(i = lesutilisateurs.count)
 		loop
 			utilisateur := lesutilisateurs.item(i)
 			utilisateur.print_utilisateur
@@ -106,14 +111,10 @@ feature{ANY}
 		else
 			isa:=False
 		end
-		io.put_string(id)
-		io.put_string(nom)
-		io.put_string(prenom)
 		create utilisateur.init(id, nom, prenom, isa)
+		io.put_string(utilisateur.get_nom)
 		lesutilisateurs.add_last(utilisateur)
-		io.put_string(lesutilisateurs.item(1).get_nom)
 		exporter_utilisateur
-		io.put_string(lesutilisateurs.item(1).get_nom)
 		io.put_string("Utilisateur correctement ajouté")
 		
 	end
@@ -335,16 +336,15 @@ feature{ANY}
 		i:INTEGER
 		utilisateur:UTILISATEUR
 	do
-		create utilisateur.make
 		res := ""
 		from
-			i := 2
-		until(i = lesutilisateurs.count - 1)
+			i := 1
+		until(i = lesutilisateurs.count)
 		loop
 			utilisateur := lesutilisateurs.item(i)
 			io.put_string(utilisateur.get_nom)
 			io.put_string(i.to_string)
-			res := res + "%N" + utilisateur.to_file_string
+			res := res + utilisateur.to_file_string + "%N"
 			i := i + 1 
 		end
 		iu.to_file("utilisateurs.txt", res)

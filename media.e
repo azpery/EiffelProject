@@ -83,4 +83,4 @@ feature {ANY}
 
 	get_id:STRING is deferred end
 
-end -- class TOWER
+end -- class MEDIA

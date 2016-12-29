@@ -111,7 +111,7 @@ feature {ANY}
 		arr := parse(file)
 		from
 			i := 1
-		until i = arr.count
+		until i = arr.count - 1
 		loop
 			
 			if(arr.item(i).is_equal("nom"))then

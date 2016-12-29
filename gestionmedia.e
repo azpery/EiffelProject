@@ -236,4 +236,4 @@ feature{ANY}
 		end
 	end
 
-end -- class IU
+end -- class MEDIA

@@ -1,2 +1,17 @@
-
-Nom<tarcourt> ; Prenom<tarcourt> ; Identifiant<tarcourt>; Admin<OUI>
+Nom<Delahaye> ; Prenom<Benoit> ; Identifiant<bdelahay>
+Nom<Haddock> ; Prenom<Archibald> ; Identifiant<bachibouzouk>; Admin<OUI>
+Nom<Tournesol> ; Prenom<Tryphon> ; Identifiant<trytour>
+Nom<Bolivar> ; Prenom<Anatole> ; Identifiant<anabol>; Admin<OUI>
+Nom<Haddock> ; Prenom<Colin> ; Identifiant<colhad>
+Nom<Bocasa> ; Prenom<Tryphon> ; Identifiant<trybo>
+Nom<Patacaisse> ; Prenom<Babar> ; Identifiant<babapa>
+Nom<Bocasa> ; Prenom<Test> ; Identifiant<tesbo>
+Nom<Bocasa1> ; Prenom<Test> ; Identifiant<tesbo>
+Nom<Bocasa2> ; Prenom<Test> ; Identifiant<tesbo>
+Nom<Bocasa3> ; Prenom<Test> ; Identifiant<tesbo>
+Nom<Bocasa4> ; Prenom<Test> ; Identifiant<tesbo>
+Nom<Bocasa5> ; Prenom<Test> ; Identifiant<tesbo>
+Nom<Bocasa6> ; Prenom<Test> ; Identifiant<tesbo>
+Nom<Bocasa7> ; Prenom<Test> ; Identifiant<tesbo>
+Nom<Bocasa8> ; Prenom<Test> ; Identifiant<tesbo>
+Nom<test1> ; Prenom<test1> ; Identifiant<test1>; Admin<OUI>
