@@ -74,13 +74,14 @@ feature{ANY}
 			choix := iu.ask_question("Rechercher un média à emprunter(q pour quitter)")
 			focus := mediatheque.get_gestion_media.select_media(choix)
 			if(focus /= Void)then
-				make_emprunt
+				make_emprunt(focus)
 			end
 		end
 	end
 
 	check_reservation_available is
 	--Vérifie si une des réservations faite par l'utilisateur est de nouveau disponible.
+	--Si une des réservation est disponible, on demande s'il veut emprunter le média
 	local
 		i:INTEGER
 		reservation:RESERVATION
@@ -120,11 +121,12 @@ feature{ANY}
 			if(emprunt /= Void) then
 				lesemprunts.add_last(emprunt)
 				mesemprunts.add_last(emprunt)
+				mesempruntsnonrendu.add_last(emprunt)
 				save
 				mediatheque.get_gestion_media.save
 				io.put_string("Emprunt ajouté")
 			else
-				if(not did_made_reservation(m) and then iu.confirm("Ce média n'est actuellement pas disponible, mais désirez vous le réserver?(o pour oui"))then
+				if(not did_made_reservation(m) and then did_made_emprunt(m) and then iu.confirm("Ce média n'est actuellement pas disponible, mais désirez vous le réserver?(o pour oui"))then
 					make_reservation(m)
 				end
 			end
@@ -152,6 +154,9 @@ feature{ANY}
 	end
 
 	did_made_reservation(m:MEDIA):BOOLEAN is
+	--Retourne True si uneréservation a été effectuée sur le média.
+	require
+		media_not_void: m/= Void
 	local
 		i:INTEGER
 		reservation:RESERVATION
@@ -165,18 +170,18 @@ feature{ANY}
 		loop
 			reservation := lesreservations.item(i)
 			other := reservation.get_media
-			if(other.get_class.is_equal(m.get_class) and then other.is_equals(m))then
-				res := True
-			end
+			res := other.get_class.is_equal(m.get_class) and then other.is_equals(m)
 			i := i + 1 
 		end
 		Result := res
 	end
 
-	did_made_emprunt(e:EMPRUNT):BOOLEAN is
+	did_made_emprunt(e:MEDIA):BOOLEAN is
+	--Retourne vrai si un emprunt a été effectué
+	require
+		emprunt_not_void:e /= Void
 	local
 		i:INTEGER
-		emprunt:EMPRUNT
 		res:BOOLEAN
 	do
 		res := False
@@ -184,32 +189,20 @@ feature{ANY}
 			i :=  1
 		until(i >= lesemprunts.count)
 		loop
-			res := lesemprunts.item(i).is_equals(e) or res
+			res := lesemprunts.item(i).get_media.get_class.is_equal(e.get_class) and then lesemprunts.item(i).get_media.is_equals(e) and then not lesemprunts.item(i).get_is_rendu or res
 			i := i + 1 
 		end
 		Result := res
 	end
 
 	is_media_available(m:MEDIA):BOOLEAN is
-	local
-		i:INTEGER
-		reservation:RESERVATION
-		res:BOOLEAN
-		other:MEDIA
+	--Retourne vrai si le média n'est pas sujet à une réservation et qu'il reste plus ou moins d'un exemplaire
 	do
-		res := True
-		from
-			i :=  1
-		until(i = lesreservations.count)
-		loop
-			reservation := lesreservations.item(i)
-			other := reservation.get_media
-			if(other.get_class.is_equal(m.get_class) and then other.is_equals(m) and then other.get_nbexemplaire = 1)then
-				res := False
-			end
-			i := i + 1 
+		if(did_made_reservation(m))then
+			Result := m.get_nbexemplaire > 1
+		else
+			Result := True
 		end
-		Result := res
 	end
 	
 	save is
@@ -255,7 +248,7 @@ feature{ANY}
 	local
 		emprunt:EMPRUNT
 	do
-		emprunt := select_emprunt(mesempruntsnonrendu)
+		emprunt := select_emprunt(mesempruntsnonrendu, True)
 		if(emprunt /= Void)then
 			if(iu.confirm("Etes vous sur de vouloir rendre "+emprunt.get_media.get_titre+"%N(o pour oui, n pour non)"))then
 				emprunt.rendre
@@ -289,7 +282,7 @@ feature{ANY}
 	do
 		from
 			i :=  1
-		until(i = lesreservations.count)
+		until(i >= lesreservations.count)
 		loop
 			if(lesreservations.item(i).is_equals(r))then
 				lesreservations.remove(i)
@@ -443,12 +436,12 @@ feature{ANY}
 		end
 	end
 
-	select_emprunt(liste:ARRAY[EMPRUNT]):EMPRUNT is
+	select_emprunt(liste:ARRAY[EMPRUNT]; emprunt:BOOLEAN):EMPRUNT is
 	local
 		res:EMPRUNT
 		choix:STRING
 	do
-		print_emprunts(liste, False)
+		print_emprunts(liste, emprunt)
 		if(liste.count>0)then
 			io.put_string("%Nq pour annuler")
 			from 

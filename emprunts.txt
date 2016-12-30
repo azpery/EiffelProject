@@ -18,3 +18,12 @@ utilisateur<anabol> ; media<Marie CurieAmélie Nothombe> ; isrendu<1> ; annee_em
 utilisateur<anabol> ; media<Marie CurieAmélie Nothombe> ; isrendu<1> ; annee_emprunt<2016> ; jour_emprunt<26> ; mois_emprunt<12>; annee_retour<2016> ; jour_retour<26> ; mois_retour<12>
 utilisateur<anabol> ; media<How High2001> ; isrendu<1> ; annee_emprunt<2016> ; jour_emprunt<26> ; mois_emprunt<12>; annee_retour<2016> ; jour_retour<26> ; mois_retour<12>
 utilisateur<anabol> ; media<How High2001> ; isrendu<1> ; annee_emprunt<2016> ; jour_emprunt<26> ; mois_emprunt<12>; annee_retour<2016> ; jour_retour<26> ; mois_retour<12>
+utilisateur<anabol> ; media<OSS 117, Le Caire nid d'espions2006> ; isrendu<1> ; annee_emprunt<2016> ; jour_emprunt<27> ; mois_emprunt<12>; annee_retour<2016> ; jour_retour<27> ; mois_retour<12>
+utilisateur<anabol> ; media<Sleepy hollow2001> ; isrendu<1> ; annee_emprunt<2016> ; jour_emprunt<27> ; mois_emprunt<12>; annee_retour<2016> ; jour_retour<27> ; mois_retour<12>
+utilisateur<anabol> ; media<How High2001> ; isrendu<1> ; annee_emprunt<2016> ; jour_emprunt<27> ; mois_emprunt<12>; annee_retour<2016> ; jour_retour<27> ; mois_retour<12>
+utilisateur<anabol> ; media<How High2001> ; isrendu<1> ; annee_emprunt<2016> ; jour_emprunt<27> ; mois_emprunt<12>; annee_retour<2016> ; jour_retour<27> ; mois_retour<12>
+utilisateur<anabol> ; media<How High2001> ; isrendu<1> ; annee_emprunt<2016> ; jour_emprunt<27> ; mois_emprunt<12>; annee_retour<2016> ; jour_retour<27> ; mois_retour<12>
+utilisateur<anabol> ; media<How High2001> ; isrendu<1> ; annee_emprunt<2016> ; jour_emprunt<27> ; mois_emprunt<12>; annee_retour<2016> ; jour_retour<27> ; mois_retour<12>
+utilisateur<anabol> ; media<OSS 117, Le Caire nid d'espions2006> ; isrendu<1> ; annee_emprunt<2016> ; jour_emprunt<27> ; mois_emprunt<12>; annee_retour<2016> ; jour_retour<27> ; mois_retour<12>
+utilisateur<anabol> ; media<OSS 117, Le Caire nid d'espions2006> ; isrendu<1> ; annee_emprunt<2016> ; jour_emprunt<27> ; mois_emprunt<12>; annee_retour<2016> ; jour_retour<27> ; mois_retour<12>
+utilisateur<anabol> ; media<OSS 117, Le Caire nid d'espions2006> ; isrendu<1> ; annee_emprunt<2016> ; jour_emprunt<27> ; mois_emprunt<12>; annee_retour<2016> ; jour_retour<27> ; mois_retour<12>

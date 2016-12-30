@@ -81,6 +81,7 @@ feature {ANY}
 		choice:INTEGER
 	do
 		gestion_emprunt.print_mes_retards
+		gestion_emprunt.check_reservation_available 
 		iu.put_centered_string("Bienvenue "+utilisateur.get_prenom, '*')
 		from 
 		choice := 1

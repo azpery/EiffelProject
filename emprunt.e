@@ -50,7 +50,7 @@ feature {ANY}
 		end
 		Result := res
 	ensure
-		result_correct:Result = "1" or Result = "0"
+		result_correct:Result.is_equal("1") or Result.is_equal("0")
 	end
 	
 	is_retard:BOOLEAN is
@@ -240,7 +240,7 @@ feature {ANY}
 
 	set_media(m:MEDIA) is
 	require 
-		not_void: u /= Void
+		not_void: m /= Void
 	do
 		media := m
 	end
