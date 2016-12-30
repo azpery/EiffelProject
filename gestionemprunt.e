@@ -79,62 +79,6 @@ feature{ANY}
 		end
 		mesempruntsnonrendu := get_emprunts_non_rendu(mesemprunts)
 	end
-	
-	get_all_emprunts:ARRAY[EMPRUNT] is
-	do
-		Result := lesemprunts
-	end
-
-	get_resa:ARRAY[RESERVATION] is
-	do
-		Result := lesreservations
-	end
-
-	get_emprunt_en_cours(liste:ARRAY[EMPRUNT]):ARRAY[EMPRUNT] is
-	local
-		i:INTEGER
-		empruntencours:ARRAY[EMPRUNT]
-		emprunt:EMPRUNT	
-	do
-		create empruntencours.make(0,0)
-		from
-			i:=1
-		until(i = liste.count)
-		loop
-			emprunt := liste.item(i)
-			if(emprunt.get_is_rendu)then
-				
-			else
-				empruntencours.add_last(emprunt)
-				
-			end
-		i := i + 1		
-		end
-		
-		Result := empruntencours
-	end
-
-
-	get_emprunt_en_retard(liste:ARRAY[EMPRUNT]):ARRAY[EMPRUNT] is
-	local
-		i:INTEGER
-		enretard:ARRAY[EMPRUNT]
-		emprunt:EMPRUNT	
-	do
-		create enretard.make(0,0)
-		from
-			i:=1
-		until(i = liste.count)
-		loop
-			emprunt := liste.item(i)
-			if(emprunt.is_retard and not emprunt.get_is_rendu)then
-				enretard.add_last(emprunt)
-			else
-			end
-		i := i + 1
-		end
-		Result := enretard
-	end
 
 	check_reservation_available is
 	--Vérifie si une des réservations faite par l'utilisateur est de nouveau disponible.
@@ -469,6 +413,9 @@ feature{ANY}
 			emprunt := lesemprunts.item(i)
 			if(emprunt.is_retard and not emprunt.get_is_rendu)then
 				io.put_string(emprunt.get_utilisateur.get_prenom+" "+emprunt.get_utilisateur.get_nom+" a emprunté "+ emprunt.get_media.get_titre + " le "+ emprunt.get_date_emprunt + ". Il a donc " +emprunt.get_nb_jour_retard.to_string +" jours de retard%N")
+				if(did_made_reservation(emprunt.get_media))then
+					io.put_string("De plus, quelqu'un a effectué une reservation sur ce média.%N")
+				end
 				
 			end
 			i := i + 1 
@@ -595,6 +542,62 @@ feature{ANY}
 			i := i + 1 
 		end
 		Result := res
+	end
+
+	get_all_emprunts:ARRAY[EMPRUNT] is
+	do
+		Result := lesemprunts
+	end
+
+	get_resa:ARRAY[RESERVATION] is
+	do
+		Result := lesreservations
+	end
+
+	get_emprunt_en_cours(liste:ARRAY[EMPRUNT]):ARRAY[EMPRUNT] is
+	local
+		i:INTEGER
+		empruntencours:ARRAY[EMPRUNT]
+		emprunt:EMPRUNT	
+	do
+		create empruntencours.make(0,0)
+		from
+			i:=1
+		until(i = liste.count)
+		loop
+			emprunt := liste.item(i)
+			if(emprunt.get_is_rendu)then
+				
+			else
+				empruntencours.add_last(emprunt)
+				
+			end
+		i := i + 1		
+		end
+		
+		Result := empruntencours
+	end
+
+
+	get_emprunt_en_retard(liste:ARRAY[EMPRUNT]):ARRAY[EMPRUNT] is
+	local
+		i:INTEGER
+		enretard:ARRAY[EMPRUNT]
+		emprunt:EMPRUNT	
+	do
+		create enretard.make(0,0)
+		from
+			i:=1
+		until(i = liste.count)
+		loop
+			emprunt := liste.item(i)
+			if(emprunt.is_retard and not emprunt.get_is_rendu)then
+				enretard.add_last(emprunt)
+			else
+			end
+		i := i + 1
+		end
+		Result := enretard
 	end
 
 end -- class gestionemprunt

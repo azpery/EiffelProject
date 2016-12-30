@@ -11,7 +11,7 @@ feature {}
 	gestion_utilisateur:GESTIONUTILISATEUR
 	gestion_media:GESTIONMEDIA
 	gestion_emprunt:GESTIONEMPRUNT
-	statistique:STATISTIQUE
+	--statistique:STATISTIQUE
 	utilisateur:UTILISATEUR
 	iu:IU
 
@@ -27,18 +27,14 @@ feature {ANY}
 		id := ""
 		nom := ""
 		create gestion_utilisateur.make
+		create iu.make
 		from
 			logsvalide := False
 		until(logsvalide)
 		loop
-			io.put_string("BIENVENNUE DANS LA MEDIATHEQUE" + "%N")
-			io.put_string("Veuillez vous authentifier:" + "%N")
-			io.put_string("Identifiant:" + "%N")
-			io.read_line
-			id.copy(io.last_string)
-			io.put_string("Nom:" + "%N")
-			io.read_line
-			nom.copy(io.last_string)
+			iu.put_centered_string("BIENVENUE DANS LA MEDIATHEQUE", '*')
+			id.copy(iu.ask_question("Veuillez vous authentifier:%NIdentifiant"))
+			nom.copy(iu.ask_question("Nom"))
 			if(gestion_utilisateur.recherche(id,"id").count > 1)then
 				from
 					i := gestion_utilisateur.recherche(id,"id").count - 1
@@ -68,8 +64,7 @@ feature {ANY}
 		--utilisateur := gestion_utilisateur.recherche("anabol","id").item(1)
 		create gestion_media.make(Current)
 		create gestion_emprunt.make(Current)
-		create iu.make
-		create statistique.make(Current)
+		--create statistique.make(Current)
 		if(utilisateur.get_isadmin)then
 			from 
 			choice := 1
@@ -89,6 +84,7 @@ feature {ANY}
 		else
 			print_menu_utilisateur
 		end
+		iu.put_centered_string("A bientôt "+utilisateur.get_prenom, ' ')
 	end
 
 	print_menu_admin is
@@ -113,7 +109,7 @@ feature {ANY}
 			when 3 then
 				gestion_emprunt.enter
 			when 4 then
-				statistique.enter
+				--statistique.enter
 			when 5 then
 				p.not_bad
 			else
