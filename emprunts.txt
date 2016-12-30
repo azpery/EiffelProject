@@ -27,3 +27,7 @@ utilisateur<anabol> ; media<How High2001> ; isrendu<1> ; annee_emprunt<2016> ; j
 utilisateur<anabol> ; media<OSS 117, Le Caire nid d'espions2006> ; isrendu<1> ; annee_emprunt<2016> ; jour_emprunt<27> ; mois_emprunt<12>; annee_retour<2016> ; jour_retour<27> ; mois_retour<12>
 utilisateur<anabol> ; media<OSS 117, Le Caire nid d'espions2006> ; isrendu<1> ; annee_emprunt<2016> ; jour_emprunt<27> ; mois_emprunt<12>; annee_retour<2016> ; jour_retour<27> ; mois_retour<12>
 utilisateur<anabol> ; media<OSS 117, Le Caire nid d'espions2006> ; isrendu<1> ; annee_emprunt<2016> ; jour_emprunt<27> ; mois_emprunt<12>; annee_retour<2016> ; jour_retour<27> ; mois_retour<12>
+utilisateur<anabol> ; media<Voyage au centre de la terreJules Verne> ; isrendu<0> ; annee_emprunt<2016> ; jour_emprunt<29> ; mois_emprunt<12>
+utilisateur<anabol> ; media<The lord of the ringsJ.R.R. Tolkien> ; isrendu<0> ; annee_emprunt<2016> ; jour_emprunt<29> ; mois_emprunt<12>
+utilisateur<anabol> ; media<The lord of the ringsJ.R.R. Tolkien> ; isrendu<0> ; annee_emprunt<2016> ; jour_emprunt<29> ; mois_emprunt<12>
+utilisateur<anabol> ; media<The lord of the rings2004> ; isrendu<0> ; annee_emprunt<2016> ; jour_emprunt<29> ; mois_emprunt<12>

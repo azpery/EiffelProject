@@ -114,7 +114,6 @@ feature {ANY}
 				i := 1
 			until i = arr.count
 			loop
-			
 				if(arr.item(i).is_equal("nom"))then
 					nouvel_utilisateur.set_nom(arr.item(i+1))
 				end

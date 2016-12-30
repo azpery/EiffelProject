@@ -77,6 +77,63 @@ feature{ANY}
 				make_emprunt(focus)
 			end
 		end
+		mesempruntsnonrendu := get_emprunts_non_rendu(mesemprunts)
+	end
+	
+	get_all_emprunts:ARRAY[EMPRUNT] is
+	do
+		Result := lesemprunts
+	end
+
+	get_resa:ARRAY[RESERVATION] is
+	do
+		Result := lesreservations
+	end
+
+	get_emprunt_en_cours(liste:ARRAY[EMPRUNT]):ARRAY[EMPRUNT] is
+	local
+		i:INTEGER
+		empruntencours:ARRAY[EMPRUNT]
+		emprunt:EMPRUNT	
+	do
+		create empruntencours.make(0,0)
+		from
+			i:=1
+		until(i = liste.count)
+		loop
+			emprunt := liste.item(i)
+			if(emprunt.get_is_rendu)then
+				
+			else
+				empruntencours.add_last(emprunt)
+				
+			end
+		i := i + 1		
+		end
+		
+		Result := empruntencours
+	end
+
+
+	get_emprunt_en_retard(liste:ARRAY[EMPRUNT]):ARRAY[EMPRUNT] is
+	local
+		i:INTEGER
+		enretard:ARRAY[EMPRUNT]
+		emprunt:EMPRUNT	
+	do
+		create enretard.make(0,0)
+		from
+			i:=1
+		until(i = liste.count)
+		loop
+			emprunt := liste.item(i)
+			if(emprunt.is_retard and not emprunt.get_is_rendu)then
+				enretard.add_last(emprunt)
+			else
+			end
+		i := i + 1
+		end
+		Result := enretard
 	end
 
 	check_reservation_available is
