@@ -84,6 +84,7 @@ feature{ANY}
 		rep:STRING
 		isa:BOOLEAN
 		utilisateur:UTILISATEUR
+		valeurjuste:BOOLEAN
 		
 	do
 		prenom:=""
@@ -102,14 +103,23 @@ feature{ANY}
 		io.put_string("%N")
 		io.read_line
 		prenom.copy(io.last_string)
-		io.put_string("L'utilisateur est-il un administrateur? 1: oui, 2: non:")
-		io.put_string("%N")
-		io.read_line
-		rep.copy(io.last_string)
-		if(rep.is_equal("1")) then
-			isa:=True
-		else
-			isa:=False
+		from
+			
+		until(valeurjuste=True)
+		loop
+			io.put_string("L'utilisateur est-il un administrateur? 1: oui, 2: non:")
+			io.put_string("%N")
+			io.read_line
+			rep.copy(io.last_string)
+			if(rep.is_equal("1")) then
+				isa:=True
+				valeurjuste:=True
+			elseif(rep.is_equal("2")) then
+				isa:=False
+				valeurjuste:=True
+			else
+				io.put_string("Valeur incorrecte, veuillez réessayer")
+			end
 		end
 		create utilisateur.init(id, nom, prenom, isa)
 		io.put_string(utilisateur.get_nom)
@@ -168,6 +178,9 @@ feature{ANY}
 	end
 
 	recherche(terme:STRING; type:STRING):ARRAY[UTILISATEUR] is
+	require
+		termenonvoid:terme /= Void
+		typenonvoid:type /= Void
 	local
 		i:INTEGER
 		resultat_recherche:ARRAY[UTILISATEUR]
