@@ -59,15 +59,12 @@ feature{ANY}
 	end
 
 
-
---: ARRAY[TOP]
 	get_top_media  is
 	local
 		top:TOP
 		i, j:INTEGER
 		lesemprunts:ARRAY[EMPRUNT]
 		trouve:BOOLEAN
-		--letop:ARRAY[TOP]
 	do
 		create top.make
 		create letop.make(0,0)
@@ -193,18 +190,11 @@ feature{ANY}
 				create temp.make
 				if(letop.item(i).get_number < letop.item(j).get_number) then
 					
-					temp:=letop.item(i)	
-					--letop.item(i). := letop.item(j)
-					--letop.item(j) := letop.item(i)
-					--letop.remove(j +1)
+					temp:=letop.item(i)
 					letop.add(letop.item(j), i)
 					letop.remove(j +1)
 					letop.add(temp, j)
 					letop.remove(i +1)
-					--remove (index: INTEGER)
-					--letop.swap(i, j)
-					--letop.put(letop.item(i), j)
-					--letop.put(temp, i)
 				 
 					
 				else
@@ -216,7 +206,7 @@ feature{ANY}
 			
 			i := i + 1 
 		end
-		--afficher_top_cinq
+
 	end
 	
 	
