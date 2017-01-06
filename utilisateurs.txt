@@ -6,5 +6,3 @@ Nom<Haddock> ; Prenom<Colin> ; Identifiant<colhad>
 Nom<Bocasa> ; Prenom<Tryphon> ; Identifiant<trybo>
 Nom<Patacaisse> ; Prenom<Babar> ; Identifiant<babapa>
 Nom<Bocasa> ; Prenom<Test> ; Identifiant<tesbo>
-Nom<pas de nom> ; Prenom<pas de prénom> ; Identifiant<NoId>
-Nom<admin> ; Prenom<admin> ; Identifiant<admin>; Admin<OUI>

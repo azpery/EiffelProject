@@ -112,7 +112,7 @@ feature {ANY}
 		if(arr.upper > 3) then
 			from
 				i := 1
-			until i = arr.count
+			until i = arr.count - 1
 			loop
 				if(arr.item(i).is_equal("nom"))then
 					nouvel_utilisateur.set_nom(arr.item(i+1))

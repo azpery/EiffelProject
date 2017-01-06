@@ -11,7 +11,7 @@ feature {}
 	gestion_utilisateur:GESTIONUTILISATEUR
 	gestion_media:GESTIONMEDIA
 	gestion_emprunt:GESTIONEMPRUNT
-	--statistique:STATISTIQUE
+	statistique:STATISTIQUE
 	utilisateur:UTILISATEUR
 	iu:IU
 
@@ -64,7 +64,7 @@ feature {ANY}
 		--utilisateur := gestion_utilisateur.recherche("anabol","id").item(1)
 		create gestion_media.make(Current)
 		create gestion_emprunt.make(Current)
-		--create statistique.make(Current)
+		create statistique.make(Current)
 		if(utilisateur.get_isadmin)then
 			from 
 			choice := 1
@@ -109,7 +109,7 @@ feature {ANY}
 			when 3 then
 				gestion_emprunt.enter
 			when 4 then
-				--statistique.enter
+				statistique.enter
 			when 5 then
 				p.not_bad
 			else
