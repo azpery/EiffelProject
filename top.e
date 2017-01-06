@@ -20,7 +20,6 @@ feature {ANY}
 	init(nom:STRING; nombre:INTEGER) is
 	require
 		nomnotvoid:nom /= Void
-		nombrenotvoid:nombre /= Void
 	do
 		name := nom
 		number := nombre
@@ -42,8 +41,6 @@ feature {ANY}
 
 	set_number(nombre:INTEGER) is
 	--Modifie nombre
-	require
-		nombrenotvoid:nombre /= Void
 	do
 		number := nombre
 	end

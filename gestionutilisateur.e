@@ -352,6 +352,14 @@ feature{ANY}
 
 
 
-
+	get_lesutilisateurs:ARRAY[UTILISATEUR] is
+	do
+		Result := lesutilisateurs
+	end
+	
+	set_lesutilisateurs(u:ARRAY[UTILISATEUR]) is
+	do
+		lesutilisateurs := u
+	end
 
 end -- class GESTIONUTILISATEUR

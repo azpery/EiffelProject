@@ -4,7 +4,7 @@ inherit MEDIA
 	redefine  make end	
 
 creation{ANY}
-	 make
+	 make, init
 
 feature{}
 	annee : STRING
@@ -21,6 +21,16 @@ feature{ANY}
 		type := ""
 		create acteur.make(0,0)
 		type := "Pas de type"
+	end
+
+	init(t:STRING; a:STRING; r:STRING; ty:STRING)is
+	do
+		titre:=t
+		nbexemplaire:=0
+		annee:=a
+		realisateur:=r
+		create acteur.make(0,0)
+		type:=ty
 	end
 
 	set_media is

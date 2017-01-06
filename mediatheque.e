@@ -5,7 +5,7 @@ class MEDIATHEQUE
 --
 	
 creation {ANY}
-	make
+	make, init
 
 feature {}
 	gestion_utilisateur:GESTIONUTILISATEUR
@@ -16,6 +16,29 @@ feature {}
 	iu:IU
 
 feature {ANY}
+	init(id:STRING;nom:STRING) is
+	local
+		logsvalide:BOOLEAN
+		i:INTEGER
+	do
+		create gestion_utilisateur.make
+		create iu.make
+		logsvalide := False
+		if(not id.is_empty and not nom.is_empty and then gestion_utilisateur.recherche(id,"id").count > 1)then
+			from
+				i := gestion_utilisateur.recherche(id,"id").count - 1
+			until(i = 0 or logsvalide)
+			loop
+				
+				utilisateur := gestion_utilisateur.recherche(id,"id").item(i)
+				logsvalide := utilisateur.get_nom.is_equal(nom)
+				i := i - 1					
+			end
+			create gestion_media.make(Current)
+			create gestion_emprunt.make(Current)
+			create statistique.make(Current)				
+		end
+	end
 	make is
 		-- Creation du jeu et boucle principale
 	local
@@ -100,7 +123,7 @@ feature {ANY}
 		choice := 1
 		until(choice = 0)
 		loop
-			choice := iu.show_multiple_choice("Gérer les utilisateurs;Gérer les médias;Gérer les emprunts;Statistiques", "Menu principal")
+			choice := iu.show_multiple_choice("Gérer les utilisateurs;Gérer les médias;Gérer les emprunts;Statistiques;Accéder au tests unitaires", "Menu principal")
 			inspect choice
 			when 1 then
 				gestion_utilisateur.enter
@@ -111,6 +134,8 @@ feature {ANY}
 			when 4 then
 				statistique.enter
 			when 5 then
+				test
+			when 6 then
 				p.not_bad
 			else
 			
@@ -144,6 +169,19 @@ feature {ANY}
 			
 			end
 		end	
+	end
+
+	test is
+	local
+		emprunt:UTEMPRUNT
+		media:UTMEDIA
+		mediat:UTMEDIATHEQUE
+		user:UTUSER
+	do
+		create emprunt.main
+		create media.main(iu)
+		create mediat.main(iu)
+		create user.main(iu)
 	end
 
 	get_gestion_media:GESTIONMEDIA is

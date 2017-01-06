@@ -4,7 +4,7 @@ inherit MEDIA
 	redefine make end	
 
 creation{ANY}
-	 make
+	 make,init
 
 feature{}
 	auteur : STRING
@@ -14,6 +14,13 @@ feature{ANY}
 	do
 		super_make
 		auteur := "Pas d'auteur"
+	end
+	init (t:STRING; au:STRING; nb:INTEGER) is
+		-- Creation d'un utilisateur
+	do
+		titre := t
+		nbexemplaire := nb
+		auteur:= au
 	end
 
 	set_media is

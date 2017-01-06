@@ -21,9 +21,12 @@ feature {}
 	init (login:STRING; n:STRING; p:STRING; isa:BOOLEAN) is
 		-- Creation d'un utilisateur
 	do
-		id := login
-		nom := n
-		prenom := p
+		id := ""
+		nom := ""
+		prenom := ""
+		id.copy(login)
+		nom.copy(n)
+		prenom.copy(p)
 		isadmin := isa
 	end
 

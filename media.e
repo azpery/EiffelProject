@@ -18,12 +18,6 @@ feature {}
 		nbexemplaire := 1
 		create iu.make
 	end
-	init (t:STRING; an:STRING; nb:INTEGER) is
-			-- Creation d'un utilisateur
-		do
-			titre := t
-			nbexemplaire := nb
-		end
 
 feature {ANY}
 
