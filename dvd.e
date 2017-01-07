@@ -37,10 +37,23 @@ feature{ANY}
 		--Méthode pour renseigner tous les champs de l'objet
 	local
 		choix:STRING
+		ok, ok1: BOOLEAN
 	do
 		choix := ""
 		titre.copy(iu.ask_question("Renseigner le titre:"))
-		annee.copy(iu.ask_question("Renseigner l'année:"))
+		from
+			ok1:= False
+		until(ok1=True)
+		loop
+			io.put_string("Renseigner l'année: ")
+			io.read_line
+			if(io.last_string.is_integer)then
+				ok1:=True
+				annee.copy(io.last_string)
+			else
+				io.put_string("Veuillez entrez un nombre %N")
+			end
+		end
 		realisateur.copy(iu.ask_question("Renseigner le nom du réalisateur:"))
 		type.copy(iu.ask_question("Renseigner le type de packaging"))
 		choix.copy(iu.ask_question("Renseigner le nom d'un acteur(laisser vide si non désiré):"))
@@ -49,9 +62,23 @@ feature{ANY}
 		until (choix.is_equal(""))
 		loop
 			add_acteur(choix)
-			choix.copy(iu.ask_question("Renseigner le nom d'un acteur(laisser vide si non désiré):"))
+			io.put_string("Acteur ajouté %N")
+			choix.copy(iu.ask_question("Renseigner le nom d'un autre acteur(laisser vide si non désiré):"))
 		end
-		nbexemplaire := iu.ask_question("Renseigner le nombre d'exemplaires disponibles:").to_integer
+
+		from
+			ok:= False
+		until(ok=True)
+		loop
+			io.put_string("Renseigner le nombre d'exemplaires disponibles :")
+			io.read_line
+			if(io.last_string.is_integer)then
+				ok:=True
+				nbexemplaire := io.last_string.to_integer
+			else
+				io.put_string("Veuillez entrez un nombre %N")
+			end
+		end	
 	end
 
 	modifier_media is
@@ -59,6 +86,7 @@ feature{ANY}
 	local
 		choix:STRING
 		c:INTEGER
+		ok, ok1:BOOLEAN
 	do
 		from
 			c := 1
@@ -70,13 +98,37 @@ feature{ANY}
 			when 1 then
 				titre.copy(iu.ask_question("Renseigner le titre:"))
 			when 2 then 
-				annee.copy(iu.ask_question("Renseigner l'année:"))
+				from
+					ok1:= False
+				until(ok1=True)
+				loop
+					io.put_string("Renseigner l'année: ")
+					io.read_line
+					if(io.last_string.is_integer)then
+						ok1:=True
+						annee.copy(io.last_string)
+					else
+						io.put_string("Veuillez entrez un nombre %N")
+					end
+				end
 			when 3 then 
 				realisateur.copy(iu.ask_question("Renseigner le nom du réalisateur:"))
 			when 4 then 
 				type.copy(iu.ask_question("Renseigner le type de packaging"))
 			when 5 then 
-				nbexemplaire := iu.ask_question("Renseigner le nombre d'exemplaires disponibles:").to_integer
+				from
+					ok:= False
+				until(ok=True)
+				loop
+					io.put_string("Renseigner le nombre d'exemplaires disponibles :")
+					io.read_line
+					if(io.last_string.is_integer)then
+						ok:=True
+						nbexemplaire := io.last_string.to_integer
+					else
+						io.put_string("Veuillez entrez un nombre %N")
+					end
+				end	
 			when 6 then 
 				choix.copy(iu.ask_question("Renseigner le nom d'un acteur(laisser vide si non désiré):"))
 				from 

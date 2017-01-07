@@ -36,7 +36,10 @@ feature {ANY}
 			end
 			create gestion_media.make(Current)
 			create gestion_emprunt.make(Current)
-			create statistique.make(Current)				
+			create statistique.make(Current)
+		
+		else
+				
 		end
 	end
 	make is
@@ -56,9 +59,10 @@ feature {ANY}
 		until(logsvalide)
 		loop
 			iu.put_centered_string("BIENVENUE DANS LA MEDIATHEQUE", '*')
-			id.copy(iu.ask_question("Veuillez vous authentifier:%NIdentifiant"))
-			nom.copy(iu.ask_question("Nom"))
+			id.copy(iu.ask_question("Veuillez vous authentifier:%N (Si vous n'avez pas de comptes, vous pouvez acceder à la consultation des médias en entrant l'identifiant: visiteur) %NIdentifiant"))
+			
 			if(gestion_utilisateur.recherche(id,"id").count > 1)then
+				nom.copy(iu.ask_question("Nom"))
 				from
 					i := gestion_utilisateur.recherche(id,"id").count - 1
 				until(i = 0 or logsvalide)
@@ -78,6 +82,9 @@ feature {ANY}
 				else
 					io.put_string("Combinaison login/Nom invalide" + "%N")
 				end
+			elseif(id.is_equal("visiteur"))then
+				nom.copy("visiteur")
+				print_menu_visiteur			
 			else				
 				io.put_string("Identifiant invalide" + "%N")
 			end
@@ -100,11 +107,10 @@ feature {ANY}
 				when 2 then
 					print_menu_admin
 				else
-			
+					
 				end
 			end
-			
-		else
+		else	
 			print_menu_utilisateur
 		end
 		iu.put_centered_string("A bientôt "+utilisateur.get_prenom, ' ')
@@ -155,7 +161,7 @@ feature {ANY}
 		choice := 1
 		until(choice = 0)
 		loop
-			choice := iu.show_multiple_choice("Consulter les médias disponibles à la location;Effectuer un emprunt;Rendre une location;Consulter mes emprunts en cours", "Menu principal")
+			choice := iu.show_multiple_choice("Consulter les médias disponibles à la location;Effectuer un emprunt;Rendre une location;Consulter mes emprunts en cours;Consulter mes réservations en cours", "Menu principal")
 			inspect choice
 			when 1 then
 				gestion_media.rechercher_media
@@ -165,8 +171,29 @@ feature {ANY}
 				gestion_emprunt.rendre_mon_media
 			when 4 then
 				gestion_emprunt.print_emprunts(gestion_emprunt.get_mesemprunts, False)
+			when 5 then
+				gestion_emprunt.print_reservation(gestion_emprunt.get_mesreservations)
 			else
 			
+			end
+		end	
+	end
+
+	print_menu_visiteur is
+	local
+		choice:INTEGER
+	do
+		create gestion_media.make(Current)
+		iu.put_centered_string("Bienvenue visiteur", '*')
+		from
+			choice := 1
+		until(choice = 0)
+		loop
+			choice := iu.show_multiple_choice("Consulter les médias disponibles à la location", "Menu principal")
+			inspect choice
+			when 1 then
+				gestion_media.consulter_media
+			else
 			end
 		end	
 	end

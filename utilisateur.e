@@ -28,6 +28,7 @@ feature {}
 		nom.copy(n)
 		prenom.copy(p)
 		isadmin := isa
+		
 	end
 
 feature {ANY}
@@ -97,6 +98,8 @@ feature {ANY}
 		io.put_string("Prénom:")
 		io.put_string(prenom)
 		io.put_string("%N")
+		io.put_string("%N")
+		
 	end
 
 	to_file_string: STRING is

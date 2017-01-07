@@ -1,1 +1,3 @@
 utilisateur<anabol> ; media<HP2012> ; annee_reservation<2016> ; jour_reservation<26> ; mois_reservation<12>
+utilisateur<tesbo> ; media<Shutter Island2010> ; annee_reservation<2017> ; jour_reservation<7> ; mois_reservation<1>
+utilisateur<admin> ; media<OSS 117, Le Caire nid d'espions2006> ; annee_reservation<2017> ; jour_reservation<7> ; mois_reservation<1>

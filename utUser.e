@@ -24,7 +24,7 @@ local
 	assert : BOOLEAN
 do
 	assert := False
-	create u.init("rdel", "Robin", "Delaporte", False)
+	create u.init("rdel", "Delaporte", "Robin", False)
 	assert := u.get_id.is_equal("rdel") and u.get_prenom.is_equal("Robin") and u.get_nom.is_equal("Delaporte") and u.get_isadmin = False
 	if assert = True then
 		io.put_string("Test ajout utilisateur : OK%N")

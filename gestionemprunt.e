@@ -40,22 +40,26 @@ feature{ANY}
 			choix := 1
 		until(choix = 0)
 		loop
-			choix := iu.show_multiple_choice("Effectuer un nouvel emprunt;Afficher mes emprunts;Rendre un média;Rendre tous mes médias;Afficher mes retards;Afficher les retards;Afficher mes réservations","Menu gestion des emprunts")
+			choix := iu.show_multiple_choice("Effectuer un nouvel emprunt;Afficher mes emprunts;Afficher tous les emprunts;Rendre un média;Rendre tous mes médias;Afficher mes retards;Afficher les retards;Afficher mes réservations;Afficher toutes les réservations","Menu gestion des emprunts")
 			inspect choix
 			when 1 then
 				add_emprunt
 			when 2 then
 				print_emprunts(mesemprunts, False)
 			when 3 then
-				rendre_mon_media
+				print_emprunts(lesemprunts, False)
 			when 4 then
-				rendre_tous_mes_medias
+				rendre_mon_media
 			when 5 then
-				print_mes_retards
+				rendre_tous_mes_medias
 			when 6 then
-				print_retards
+				print_mes_retards
 			when 7 then
+				print_retards
+			when 8 then
 				print_reservation(mesreservations)
+			when 9 then
+				print_reservation(lesreservations)
 			else		
 			end
 		end
@@ -127,7 +131,7 @@ feature{ANY}
 				mediatheque.get_gestion_media.save
 				io.put_string("Emprunt ajouté")
 			else
-				if(not did_made_reservation(m) and then did_made_emprunt(m) and then iu.confirm("Ce média n'est actuellement pas disponible, mais désirez vous le réserver?(o pour oui"))then
+				if(not did_made_reservation(m) and then iu.confirm("Ce média n'est actuellement pas disponible, mais désirez vous le réserver?(o pour oui)"))then
 					make_reservation(m)
 				end
 			end
@@ -167,7 +171,7 @@ feature{ANY}
 		res := False
 		from
 			i :=  1
-		until(i = lesreservations.count)
+		until(i = lesreservations.count or res=True)
 		loop
 			reservation := lesreservations.item(i)
 			other := reservation.get_media
@@ -399,6 +403,12 @@ feature{ANY}
 	do
 		Result := mesemprunts
 	end
+
+	get_mesreservations:ARRAY[RESERVATION] is
+	do
+		Result := mesreservations
+	end
+
 
 	print_retards is
 		--Affichage des emprunts en retard

@@ -25,10 +25,25 @@ feature{ANY}
 
 	set_media is
 	--Méthode pour renseigner tous les champs de l'objet
+	local
+		ok: BOOLEAN
 	do
 		titre.copy(iu.ask_question("Renseigner le titre"))
 		auteur.copy(iu.ask_question("Renseigner l'auteur"))
-		nbexemplaire := iu.ask_question("Renseigner le nombre d'exemplaires disponibles").to_integer
+		
+		from
+			ok:= False
+		until(ok=True)
+		loop
+			io.put_string("Renseigner le nombre d'exemplaires disponibles :")
+			io.read_line
+			if(io.last_string.is_integer)then
+				ok:=True
+				nbexemplaire := io.last_string.to_integer
+			else
+				io.put_string("Veuillez entrez un nombre %N")
+			end
+		end	
 	end
 
 	modifier_media is

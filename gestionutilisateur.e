@@ -22,7 +22,7 @@ feature{ANY}
 			choix := 1
 		until(choix = 0)
 		loop
-			choix := iu.show_multiple_choice("Afficher la liste des utilisateurs chargés;Recharger les utilisateurs;Ajouter un utilisateur;Rechercher un utilisateur; Modifier un utilisateur","Menu gestion des utilisateurs")
+			choix := iu.show_multiple_choice("Afficher la liste des utilisateurs chargés;Recharger les utilisateurs;Ajouter un utilisateur;Rechercher un utilisateur;Modifier un utilisateur","Menu gestion des utilisateurs")
 			inspect choix
 			when 1 then
 				afficher_utilisateurs
@@ -118,11 +118,11 @@ feature{ANY}
 				isa:=False
 				valeurjuste:=True
 			else
-				io.put_string("Valeur incorrecte, veuillez réessayer")
+				io.put_string("Valeur incorrecte, veuillez réessayer %N")
 			end
 		end
 		create utilisateur.init(id, nom, prenom, isa)
-		io.put_string(utilisateur.get_nom)
+		--io.put_string(utilisateur.get_nom)
 		lesutilisateurs.add_last(utilisateur)
 		exporter_utilisateur
 		io.put_string("Utilisateur correctement ajouté")
@@ -138,20 +138,29 @@ feature{ANY}
 		utilisateur:UTILISATEUR
 		resultat_recherche:ARRAY[UTILISATEUR]
 		j:INTEGER
+		ok:BOOLEAN
 	do
 		create utilisateur.make
 		create resultat_recherche.make(0,0)
-		choix := iu.show_multiple_choice("Login;Nom;Prénom","Rechercher par:")
-		inspect choix
-		when 1 then
-			type:="id"
-		when 2 then
-			type:="nom"
-		when 3 then
-			type:="prenom"
-		else		
+		from
+		choix:=1
+		ok:=False
+		until(choix=0 or ok=True)
+		loop
+			choix := iu.show_multiple_choice("Login;Nom;Prénom","Rechercher par:")
+			inspect choix
+			when 1 then
+				type:="id"
+				ok:=True
+			when 2 then
+				type:="nom"
+				ok:=True
+			when 3 then
+				type:="prenom"
+				ok:=True
+			else		
+			end
 		end
-	
 		io.put_string("Veuillez saisir le terme de la recherche:")
 		io.read_line
 		terme:=io.last_string
@@ -235,7 +244,7 @@ feature{ANY}
 		loop
 			create utilisateur.make
 			create resultat_recherche.make(0,0)
-			choix := iu.show_multiple_choice("Login; Nom; Prénom;","Rechercher par:")
+			choix := iu.show_multiple_choice("Login;Nom;Prénom","Rechercher par:")
 			inspect choix
 				when 1 then
 					type:="id"
@@ -297,30 +306,30 @@ feature{ANY}
 					c := 1
 				until(c=0)
 				loop
-					c := iu.show_multiple_choice("Modifier le login;Modifier le prénom;Modifier le nom;Modifier le type Admin","Modification de ")
+					c := iu.show_multiple_choice("Modifier le prénom;Modifier le nom;Modifier le type Admin","Modification de ")
 					inspect c
-						when 1 then
-							var:=""
-							io.put_string("Entrez le nouveau login:")
-							io.put_string("%N")
-							io.read_line
-							var.copy(io.last_string)
-							resultat_recherche.item(choix).set_id(var)
-						when 2 then 
+						--when 1 then
+						--	var:=""
+						--	io.put_string("Entrez le nouveau login:")
+						--	io.put_string("%N")
+						--	io.read_line
+						--	var.copy(io.last_string)
+						--	resultat_recherche.item(choix).set_id(var)
+						when 1 then 
 							var:=""
 							io.put_string("Entrez le nouveau prénom:")
 							io.put_string("%N")
 							io.read_line
 							var.copy(io.last_string)
 							resultat_recherche.item(choix).set_prenom(var)
-						when 3 then 
+						when 2 then 
 							var:=""
 							io.put_string("Entrez le nouveau nom:")
 							io.put_string("%N")
 							io.read_line
 							var.copy(io.last_string)
 							resultat_recherche.item(choix).set_nom(var)
-						when 4 then 
+						when 3 then 
 							var:=""
 							io.put_string("Admin ou non? (Entrez 1 pour admin, 2 sinon)")
 							io.put_string("%N")
@@ -355,8 +364,8 @@ feature{ANY}
 		until(i = lesutilisateurs.count)
 		loop
 			utilisateur := lesutilisateurs.item(i)
-			io.put_string(utilisateur.get_nom)
-			io.put_string(i.to_string)
+			--io.put_string(utilisateur.get_nom)
+			--io.put_string(i.to_string)
 			res := res + utilisateur.to_file_string + "%N"
 			i := i + 1 
 		end

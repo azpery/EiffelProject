@@ -31,3 +31,7 @@ utilisateur<anabol> ; media<Voyage au centre de la terreJules Verne> ; isrendu<0
 utilisateur<anabol> ; media<The lord of the ringsJ.R.R. Tolkien> ; isrendu<0> ; annee_emprunt<2016> ; jour_emprunt<29> ; mois_emprunt<12>
 utilisateur<anabol> ; media<The lord of the ringsJ.R.R. Tolkien> ; isrendu<0> ; annee_emprunt<2016> ; jour_emprunt<29> ; mois_emprunt<12>
 utilisateur<anabol> ; media<The lord of the rings2004> ; isrendu<0> ; annee_emprunt<2016> ; jour_emprunt<29> ; mois_emprunt<12>
+utilisateur<anabol> ; media<Shutter Island2010> ; isrendu<1> ; annee_emprunt<2017> ; jour_emprunt<7> ; mois_emprunt<1>; annee_retour<2017> ; jour_retour<7> ; mois_retour<1>
+utilisateur<anabol> ; media<Shutter Island2010> ; isrendu<1> ; annee_emprunt<2017> ; jour_emprunt<7> ; mois_emprunt<1>; annee_retour<2017> ; jour_retour<7> ; mois_retour<1>
+utilisateur<tesbo> ; media<How High2001> ; isrendu<0> ; annee_emprunt<2017> ; jour_emprunt<7> ; mois_emprunt<1>
+utilisateur<admin> ; media<Les fourmisBernard Werber> ; isrendu<1> ; annee_emprunt<2017> ; jour_emprunt<7> ; mois_emprunt<1>; annee_retour<2017> ; jour_retour<7> ; mois_retour<1>

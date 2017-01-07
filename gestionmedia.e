@@ -124,6 +124,34 @@ feature{ANY}
 		end
 	end
 
+
+
+	consulter_media is
+	--Menu de consultation média
+	local
+		choix:INTEGER
+	do
+		from 
+			choix := 1
+		until(choix = 0)
+		loop
+			choix := iu.show_multiple_choice("Recherche rapide;Afficher tous les DVD;Afficher tous les livres;Afficher la liste des medias complètes","Menu gestion des médias")
+			inspect choix
+			when 1 then
+				afficher_medias_visiteur(rechercher(iu.ask_question("Entrez votre recherche(auteur, année, acteur, etc"), ""), True)
+			when 2 then
+				afficher_medias_visiteur(lesdvd, True)
+			when 3 then
+				afficher_medias_visiteur(leslivres, True)
+			when 4 then
+				afficher_medias_visiteur(lesdvd, False)
+				afficher_medias_visiteur(leslivres, False)
+			else		
+			end
+		end
+	end
+
+
 	rechercher(terme:STRING; type:STRING):ARRAY[MEDIA] is
 	--Prend en paramètre une liste de média, le terme de recherche et le filtre sur lequel appliquer le terme
 	--Le type de filtre peut être : titre, auteur, ou autre.
@@ -235,5 +263,24 @@ feature{ANY}
 				end
 			end
 		end
+	end
+
+	afficher_medias_visiteur(liste:ARRAY[MEDIA]; emprunt:BOOLEAN) is
+	--Prend en paramètre une liste de média l'affiche et si media est True, on propose de louer un des médias.
+	local
+		i:INTEGER
+		media:MEDIA
+			
+	do
+		from
+			i :=  1
+		until(i = liste.count)
+		loop
+			media := liste.item(i)
+			io.put_string("" + i.to_string + "-")
+			media.print_media
+			i := i + 1 
+		end
+		
 	end
 end -- class GESTIONMEDIA
